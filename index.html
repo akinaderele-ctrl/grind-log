@@ -3,8 +3,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Your Fitness Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<title>Grind Log</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -27,19 +30,29 @@
 
 - { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+html {
+background-color: #0a0a0a;
+}
+
 body {
-background: var(–black);
-color: var(–text);
+background-color: #0a0a0a !important;
+background: #0a0a0a !important;
+color: #e5e5e5 !important;
 font-family: ‘DM Sans’, sans-serif;
 min-height: 100vh;
-padding-bottom: 80px;
+min-height: -webkit-fill-available;
+padding-bottom: 100px;
+-webkit-text-size-adjust: 100%;
 }
 
 /* HEADER */
 .header {
-background: var(–charcoal);
+background-color: #1a1a1a;
+background: #1a1a1a;
 border-bottom: 1px solid #2a2a2a;
 padding: 20px 20px 0;
+padding-top: max(20px, env(safe-area-inset-top));
+position: -webkit-sticky;
 position: sticky;
 top: 0;
 z-index: 100;
@@ -106,7 +119,8 @@ border-bottom-color: var(–orange);
 
 /* WEIGHT CARD */
 .weight-hero {
-background: var(–card);
+background-color: #222222;
+background: #222222;
 border-radius: 16px;
 padding: 24px;
 margin-bottom: 16px;
@@ -145,7 +159,8 @@ letter-spacing: 1px;
 
 /* PROGRESS BAR */
 .progress-section {
-background: var(–card);
+background-color: #222222;
+background: #222222;
 border-radius: 16px;
 padding: 20px;
 margin-bottom: 16px;
@@ -175,7 +190,8 @@ transition: width 0.6s ease;
 
 /* LOG WEIGHT */
 .log-section {
-background: var(–card);
+background-color: #222222;
+background: #222222;
 border-radius: 16px;
 padding: 20px;
 margin-bottom: 16px;
@@ -261,7 +277,8 @@ flex-shrink: 0;
 /* SCHEDULE */
 .day-cards { display: flex; flex-direction: column; gap: 12px; }
 .day-card {
-background: var(–card);
+background-color: #222222;
+background: #222222;
 border-radius: 16px;
 overflow: hidden;
 border: 1px solid #2a2a2a;
@@ -439,7 +456,8 @@ margin-bottom: 16px;
 }
 .streak-card {
 flex: 1;
-background: var(–card);
+background-color: #222222;
+background: #222222;
 border-radius: 12px;
 padding: 14px;
 text-align: center;
@@ -477,10 +495,12 @@ z-index: 999;
 .bottom-nav {
 position: fixed;
 bottom: 0; left: 0; right: 0;
-background: var(–charcoal);
+background-color: #1a1a1a;
+background: #1a1a1a;
 border-top: 1px solid #2a2a2a;
 display: flex;
-padding: 8px 0 16px;
+padding: 8px 0;
+padding-bottom: max(16px, env(safe-area-inset-bottom));
 z-index: 200;
 }
 .nav-btn {
