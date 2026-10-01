@@ -37,11 +37,29 @@ button, input { font-family: 'DM Sans', -apple-system, sans-serif; -webkit-appea
 .wkdot { width: 34px; height: 34px; border-radius: 10px; border: 2px solid #444444; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 17px; color: #777777; }
 .wkdot.done { background-color: #22c55e; border-color: #22c55e; color: #0a0a0a; }
 .wkdot.next { border-color: #f97316; color: #f97316; }
+.wkdot.opt { border-style: dashed; width: 30px; height: 30px; font-size: 15px; }
+.cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+.ctile { background-color: #111111; border: 1px solid #2e2e2e; border-radius: 10px; padding: 8px 4px; text-align: center; }
+.ctile.hit { border-color: #22c55e; background-color: rgba(34,197,94,0.1); }
+.ctile-n { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #666666; line-height: 1; }
+.ctile.hit .ctile-n { color: #22c55e; }
+.ctile-l { font-size: 10px; color: #9a9a9a; margin-top: 3px; font-weight: 600; line-height: 1.2; }
+.pbar { background-color: #333333; border-radius: 99px; height: 8px; overflow: hidden; margin-top: 6px; }
+.pbar-fill { background-color: #f97316; height: 100%; border-radius: 99px; }
+.ctable { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+.ctable th { font-size: 9px; color: #8a8a8a; text-transform: uppercase; letter-spacing: 0.4px; padding: 0 0 6px; font-weight: 700; text-align: center; }
+.ctable th:first-child, .ctable td:first-child { text-align: left; width: 58px; }
+.ctable td { padding: 7px 0; border-top: 1px solid #2a2a2a; text-align: center; color: #d5d5d5; }
+.cdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #333333; }
+.cdot.hit { background-color: #22c55e; }
 .seg { display: flex; background-color: #111111; border: 1px solid #333333; border-radius: 12px; padding: 3px; gap: 3px; }
 .seg button { flex: 1; background-color: transparent; color: #8a8a8a; border: none; border-radius: 9px; padding: 9px 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; cursor: pointer; }
 .seg button.on { background-color: #f97316 !important; color: #ffffff !important; }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; }
 .chip { background-color: #111111; border: 1px solid #3a3a3a; color: #9a9a9a; border-radius: 99px; padding: 7px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; }
+.chips.tight { flex-wrap: nowrap; gap: 6px; flex-shrink: 0; }
+.chips.tight .chip, .chips.fmt .chip { padding: 7px 11px; }
+.chips.fmt { gap: 6px; }
 .chip.on { border-color: #f97316 !important; color: #f97316 !important; background-color: rgba(249,115,22,0.12) !important; }
 .wo-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; color: #f97316; line-height: 1; }
 .rx { background-color: #111111; border-radius: 10px; padding: 10px 12px; margin: 12px 0 4px; font-size: 13px; line-height: 1.45; color: #cfcfcf; }
@@ -147,6 +165,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
   <!-- TODAY -->
   <div class="page active" id="page-today">
     <div class="card" id="todayHero"></div>
+    <div class="card" id="coverCard"></div>
     <div class="card" id="baseCard" style="display:none">
       <div class="section-title">Set your starting weight</div>
       <div class="para" style="margin-bottom:12px">The year plan paces you at 0.5 lb a week from this number. Log today's weight to set it.</div>
@@ -165,12 +184,14 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
     <div class="card">
       <div class="section-title">Other activity</div>
       <div class="qgrid">
-        <button class="qbtn" onclick="logActivity('walk')"><span class="qdot" style="background-color:#22c55e"></span>Walk</button>
-        <button class="qbtn" onclick="logActivity('cardio')"><span class="qdot" style="background-color:#a78bfa"></span>Indoor cardio</button>
-        <button class="qbtn" onclick="logActivity('golf')"><span class="qdot" style="background-color:#38bdf8"></span>Golf (walked)</button>
-        <button class="qbtn" onclick="logActivity('soccer')"><span class="qdot" style="background-color:#facc15"></span>Soccer</button>
+        <button class="qbtn" onclick="logActivity('walk')"><span class="qdot" style="background-color:#22c55e"></span>Walk · 35 min</button>
+        <button class="qbtn" onclick="logActivity('cardio')"><span class="qdot" style="background-color:#a78bfa"></span>Indoor cardio · 25</button>
+        <button class="qbtn" onclick="logActivity('golf')"><span class="qdot" style="background-color:#38bdf8"></span>Golf walked · 120</button>
+        <button class="qbtn" onclick="logActivity('soccer')"><span class="qdot" style="background-color:#facc15"></span>Soccer · 60</button>
+        <button class="qbtn" style="grid-column:1 / -1" onclick="logActivity('mobility')"><span class="qdot" style="background-color:#2dd4bf"></span>Mobility / stretching · 10</button>
       </div>
-      <div class="small muted" style="margin-top:8px">Logs to the date selected in the session card above.</div>
+      <div class="row" style="margin-top:10px"><div class="small muted" style="flex-shrink:0">Minutes</div><input class="input" type="number" id="actMin" inputmode="numeric" placeholder="Optional, overrides the default"></div>
+      <div class="small muted" style="margin-top:8px;line-height:1.45">Logs to the date in the session card above. Walks, cardio and golf of 20+ minutes count as steady cardio.</div>
     </div>
     <div class="card">
       <div class="section-title">Daily habits</div>
@@ -185,7 +206,8 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
       <div id="seasonHead" style="margin-top:14px"></div>
     </div>
     <div class="card"><div class="section-title">Weekly rhythm</div><div class="rhythm" id="rhythm"></div></div>
-    <div class="card"><div class="section-title">The three workouts</div><div class="small muted" style="margin-bottom:12px">Each line: main exercise, then the gym swap and the home version.</div><div id="planWorkouts"></div></div>
+    <div class="card"><div class="section-title">The workouts</div><div class="small muted" style="margin-bottom:12px">A, B and C are the weekly three. D is optional. Each line: main exercise, then the gym swap and the home version.</div><div id="planWorkouts"></div></div>
+    <div class="card"><div class="section-title">Eight key areas, every month</div><div id="planCover"></div></div>
     <div class="card"><div class="section-title">How the weeks progress</div><div id="phaseTable"></div></div>
     <div class="card"><div class="section-title">The year at a glance</div><div id="yearTable"></div></div>
   </div>
@@ -214,6 +236,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
       <div class="chart-tip" id="chartTip">Touch the chart to read a weigh-in.</div>
       <div class="legend"><span><i class="lg-line"></i>Your weigh-ins</span><span><i class="lg-dash"></i>0.5 lb/week pace</span></div>
     </div>
+    <div class="card"><div class="section-title">Key areas by month</div><div id="coverHist"></div></div>
     <div class="card"><div class="section-title">Monthly checkpoints</div><div class="list" id="miles"></div></div>
     <div class="card"><div class="section-title">Weigh-ins</div><div class="list" id="wHist"></div></div>
     <div class="card"><div class="section-title">Sessions</div><div class="list" id="sHist"></div></div>
@@ -237,7 +260,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
     </div>
     <div class="card">
       <div class="section-title">About this plan</div>
-      <div class="para">52 weeks, Oct 5 2026 to Oct 3 2027. Three gym sessions a week at 30 to 35 minutes, built as two loops of three exercises at a single station. Each season swaps the exercise menu for variety and matches Chicago weather: outdoor walks in fall, spring and summer, indoor finishers in winter. Target pace is 0.5 lb a week, roughly 250 calories a day under maintenance. Machine layouts differ by gym, so if a loop crosses your floor, use the gym swap for that exercise.</div>
+      <div class="para">52 weeks, Oct 5 2026 to Oct 3 2027. Three gym sessions a week at 30 to 35 minutes, built as two loops of three exercises at a single station, plus an optional cardio-led Workout D in weeks you have room. The goal is all eight key areas at least once a month and 150 minutes of cardio a week. Each season swaps the exercise menu for variety and matches Chicago weather: outdoor walks in fall, spring and summer, indoor finishers in winter. Target pace is 0.5 lb a week, roughly 250 calories a day under maintenance. Machine layouts differ by gym, so if a loop crosses your floor, use the gym swap for that exercise.</div>
     </div>
   </div>
 </div>
@@ -456,6 +479,59 @@ const SEASONS = {
 };
 const TYPE_COLOR = { gym:'#f97316', walk:'#22c55e', golf:'#38bdf8', cardio:'#a78bfa', sport:'#facc15', soccer:'#facc15', rest:'#555555' };
 const KIND_LABEL = { gym:'Gym', walk:'Walk', golf:'Golf', cardio:'Indoor cardio', soccer:'Soccer' };
+TYPE_COLOR.mobility = '#2dd4bf';
+KIND_LABEL.mobility = 'Mobility';
+const DEF_MIN = { walk:35, cardio:25, golf:120, soccer:60, mobility:10 };
+const CARDIO_TARGET = 150; // minutes of moderate cardio a week
+const PARTS = [['push','Push','Push'],['pull','Pull','Pull'],['legs','Legs','Legs'],['hinge','Hinge','Hinge'],['core','Core','Core'],['steady','Steady cardio','Z2'],['intervals','Intervals','HIIT'],['mobility','Mobility','Mob']];
+const GAP_WEIGHT = { intervals:3, mobility:3, core:1, steady:1, push:0.5, pull:0.5, legs:0.5, hinge:0.5 };
+const TAGS = {
+  fall:   { A:['legs','push'], B:['pull','hinge'], C:['legs','push','pull','core'] },
+  winter: { A:['push','legs'], B:['pull','hinge'], C:['legs','push','pull','core'] },
+  spring: { A:['legs','push'], B:['hinge','pull'], C:['core','pull','push','legs'] },
+  summer: { A:['legs','push','hinge'], B:['hinge','pull','core'], C:['legs','push','pull','core'] }
+};
+const D_ORDER = ['steady','intervals','circuit','mobility'];
+const DFORMATS = {
+  steady: { name:'Zone 2 Engine', short:'Zone 2', tags:['steady'], cardio:30,
+    why:'Builds the aerobic base that drives fat loss and faster recovery between lifts. Conversational pace: you can talk in full sentences but not sing.',
+    segs:[
+      { st:'Warm-up', ex:[['Easy bike or walk','Any cardio machine','Brisk walk or march in place','Build the pace gradually.','5 min']] },
+      { st:'Main set', ex:[['Incline treadmill walk (10 to 12%, 3.0 to 3.4 mph)','Bike, rower, or stair climber','Outdoor brisk walk (winter: stair laps + step-ups)','If you cannot hold a conversation, slow down.','25 min']] },
+      { st:'Cool-down', ex:[['Hip flexor + calf stretch','Hip flexor + calf stretch','Hip flexor + calf stretch','30 seconds each side.','3 min']] } ] },
+  intervals: { name:'Intervals + Core', short:'Intervals', tags:['intervals','core'], cardio:22,
+    why:'Short hard efforts build top-end fitness in less time and carry straight over to soccer. Bike and rower keep it easy on the knees, so no running is needed.',
+    segs:[
+      { st:'Warm-up', ex:[['Easy bike, building to moderate','Rower, easy to moderate','March in place, building to high knees','The last minute should feel like a 6 out of 10.','5 min']] },
+      { st:'Intervals', ex:[['Bike: 30s hard, 90s easy','Rower: 30s hard, 90s easy','Fast step-ups or high knees: 30s hard, 90s march','Hard means 8 out of 10. Easy means full recovery.','8 rounds · 16 min']] },
+      { st:'Core', ex:[
+        ['Dead Bug','Dead Bug','Dead Bug','Low back stays on the floor.','2 × 8 each side'],
+        ['Side Plank','Side Plank','Side Plank','Hips high, one straight line.','2 × 25s each side'],
+        ['Cable Pallof Press','Band Pallof Press','Bird Dog','Resist the twist.','2 × 10 each side'] ] } ] },
+  circuit: { name:'Conditioning Circuit', short:'Circuit', tags:['intervals','legs','push','hinge'], cardio:25,
+    why:'Strength moves against the clock, so your heart rate stays high the whole time. Every minute on the minute: do the reps, rest whatever is left of that minute, then start the next station.',
+    segs:[
+      { st:'Warm-up', ex:[['Rower or bike, easy','Any cardio machine','March in place + arm circles','Loosen up, nothing hard yet.','5 min']] },
+      { st:'EMOM · 20 min · 5 rounds', ex:[
+        ['KB Swing','DB Romanian Deadlift','DB Swing','Hips snap, arms just ride along.','12'],
+        ['Goblet Squat','Leg Press','Bodyweight Squat','Sit between your heels.','10'],
+        ['Push-ups (hands on a bench if needed)','Chest Press Machine','Push-ups (hands on a couch if needed)','Body in one straight line.','8 to 10'],
+        ['Rower, hard pace','Bike, hard pace','Fast step-ups','Push the pace, then rest the rest of the minute.','40s'] ] },
+      { st:'Cool-down', ex:[['Easy walk + stretch','Easy walk + stretch','Easy walk + stretch','Bring your heart rate down before you leave.','5 min']] } ] },
+  mobility: { name:'Mobility + Core + Steady', short:'Mobility', tags:['mobility','core','steady'], cardio:15,
+    why:'Opens the hips and upper back for a fuller golf turn and protects you as soccer comes back. The lightest of the four, so it is the pick in a deload week or when you are sore.',
+    segs:[
+      { st:'Steady cardio', ex:[['Incline treadmill walk','Bike or elliptical','Outdoor brisk walk (winter: stair laps)','Easy, conversational pace.','15 min']] },
+      { st:'Mobility flow · 2 rounds', ex:[
+        ['90/90 Hip Switch','90/90 Hip Switch','90/90 Hip Switch','Sit tall, rotate from the hips.','8 each side'],
+        ['Open Book (thoracic rotation)','Open Book (thoracic rotation)','Open Book (thoracic rotation)','Follow your top hand with your eyes.','8 each side'],
+        ["World's Greatest Stretch","World's Greatest Stretch","World's Greatest Stretch",'Lunge, elbow to instep, then reach up.','5 each side'],
+        ['Half-Kneeling Hip Flexor Stretch','Half-Kneeling Hip Flexor Stretch','Half-Kneeling Hip Flexor Stretch','Squeeze the glute on the down-knee side.','30s each side'] ] },
+      { st:'Core', ex:[
+        ['Bird Dog','Bird Dog','Bird Dog','Reach long, no hip rotation.','2 × 8 each side'],
+        ['Side Plank','Side Plank','Side Plank','Hips high.','2 × 20s each side'] ] } ] }
+};
+const MON_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MODE_IDX = { gym:0, swap:1, home:2 };
 const MODE_NOTE = {
   gym:'The plan as written. Each loop stays at one station.',
@@ -476,7 +552,7 @@ let base = load('gl2_base', null);
 let mode = load('gl2_mode', 'gym');
 let _lastId = 0;
 function uid() { const n = Math.max(Date.now(), _lastId + 1); _lastId = n; return n; }
-let pickW = null, checks = {}, range = 'year', planSeason = null;
+let dFmt = null, pickW = null, checks = {}, range = 'year', planSeason = null;
 
 /* ================= DATES (local time, never UTC) ================= */
 function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -531,10 +607,48 @@ function gymInWeek(monday) {
   const a = ymd(monday), b = ymd(addDays(monday, 6));
   return allSessions().filter(s => s.kind === 'gym' && s.iso >= a && s.iso <= b);
 }
+function coreInWeek(monday) { return gymInWeek(monday).filter(s => s.w !== 'D'); }
+function dInWeek(monday) { return gymInWeek(monday).filter(s => s.w === 'D'); }
 function nextLetter(monday) {
-  const done = gymInWeek(monday).filter(s => s.w).map(s => s.w);
+  const done = coreInWeek(monday).filter(s => s.w).map(s => s.w);
   for (const L of ['A','B','C']) if (done.indexOf(L) < 0) return L;
-  return 'A';
+  return dInWeek(monday).length ? 'A' : 'D';
+}
+function dCount(f) { return DFORMATS[f].segs.reduce((n, sg) => n + sg.ex.length, 0); }
+function partName(k) { return PARTS.find(x => x[0] === k)[1]; }
+function sessTags(s) {
+  if (s.legacy) return [];
+  if (s.kind === 'gym') return s.w === 'D' ? (DFORMATS[s.f] ? DFORMATS[s.f].tags : []) : ((TAGS[s.season] || {})[s.w] || []);
+  if (s.kind === 'walk' || s.kind === 'cardio' || s.kind === 'golf') return (s.min || DEF_MIN[s.kind]) >= 20 ? ['steady'] : [];
+  if (s.kind === 'soccer') return ['intervals','legs'];
+  if (s.kind === 'mobility') return ['mobility'];
+  return [];
+}
+function sessMin(s) {
+  if (s.legacy || s.kind === 'mobility') return 0;
+  if (DEF_MIN[s.kind] !== undefined) return s.min || DEF_MIN[s.kind];
+  if (s.kind === 'gym') return s.w === 'D' ? (DFORMATS[s.f] ? DFORMATS[s.f].cardio : 0) : (s.fin ? (s.season === 'winter' ? 8 : 5) : 0);
+  return 0;
+}
+function coverage(y, m) {
+  const c = {}, pre = y + '-' + pad(m + 1);
+  PARTS.forEach(x => c[x[0]] = 0);
+  allSessions().forEach(s => { if (s.iso.slice(0, 7) === pre) sessTags(s).forEach(t => c[t]++); });
+  return c;
+}
+function weekCardio(monday) {
+  const a = ymd(monday), b = ymd(addDays(monday, 6));
+  return allSessions().filter(s => s.iso >= a && s.iso <= b).reduce((n, s) => n + sessMin(s), 0);
+}
+function recommendD(d) {
+  const p = position(d);
+  if (!p.pre && phaseKey(p.b.weeks, p.wk) === 'deload') return { f:'mobility', why:'Deload week, so keep it light.' };
+  const c = coverage(d.getFullYear(), d.getMonth()), gaps = PARTS.filter(x => !c[x[0]]).map(x => x[0]);
+  const st = (Math.max(1, p.overall || 1) - 1) % 4, order = D_ORDER.slice(st).concat(D_ORDER.slice(0, st));
+  let best = null, bestScore = 0;
+  order.forEach(f => { const sc = DFORMATS[f].tags.reduce((n, t) => n + (gaps.indexOf(t) >= 0 ? GAP_WEIGHT[t] : 0), 0); if (sc > bestScore) { best = f; bestScore = sc; } });
+  if (best) { const hit = DFORMATS[best].tags.filter(t => gaps.indexOf(t) >= 0 && GAP_WEIGHT[t] >= 1); return { f:best, why:hit.length ? 'Covers what this month is missing: ' + hit.map(partName).join(', ').toLowerCase() + '.' : 'Rounds out this month.' }; }
+  return { f:order[0], why:'Every area is covered this month, so this follows the rotation.' };
 }
 function baseline() {
   if (base && base.w) return base;
@@ -548,9 +662,9 @@ function baseline() {
 function paceAt(d) { const b = baseline(); if (!b) return null; const wks = Math.max(0, dayDiff(parse(PLAN_START), d) / 7); return b.w - PACE * wks; }
 function weekStreak() {
   let m = mondayOf(today()), n = 0;
-  if (gymInWeek(m).length >= 3) n++;
+  if (coreInWeek(m).length >= 3) n++;
   m = addDays(m, -7);
-  for (let i = 0; i < 104; i++) { if (gymInWeek(m).length >= 3) { n++; m = addDays(m, -7); } else break; }
+  for (let i = 0; i < 104; i++) { if (coreInWeek(m).length >= 3) { n++; m = addDays(m, -7); } else break; }
   return n;
 }
 
@@ -575,17 +689,19 @@ function header() {
 function sessionDate() { const el = document.getElementById('sDate'); return el && el.value ? parse(el.value) : today(); }
 function renderToday() {
   const t = today(), p = position(t), S = SEASONS[p.b.s], ph = PHASES[phaseKey(p.b.weeks, p.wk)];
-  const mon = mondayOf(t), gyms = gymInWeek(mon), done = gyms.filter(s => s.w).map(s => s.w);
+  const mon = mondayOf(t), gyms = coreInWeek(mon), done = gyms.filter(s => s.w).map(s => s.w), dDone = dInWeek(mon).length > 0;
   const r = S.rhythm[dowIdx(t)];
   if (!pickW) pickW = nextLetter(mon);
   let dots = '';
   ['A','B','C'].forEach(L => { const cls = done.indexOf(L) >= 0 ? 'done' : L === pickW ? 'next' : ''; dots += '<div class="wkdot ' + cls + '">' + (done.indexOf(L) >= 0 ? '✓' : L) + '</div>'; });
+  dots += '<div class="wkdot opt ' + (dDone ? 'done' : pickW === 'D' ? 'next' : '') + '">' + (dDone ? '✓' : 'D') + '</div>';
   const extra = Math.max(0, gyms.length - 3);
   document.getElementById('todayHero').innerHTML =
     '<div class="kicker">' + (p.pre ? 'Plan starts Monday, Oct 5 · previewing week 1' : p.done ? 'Year 1 complete · repeating Fall Retest until the year 2 plan' : p.b.name + ' · Week ' + p.wk + ' of ' + p.b.weeks + ' · ' + ph.name) + '</div>' +
     '<div class="hero-date">' + ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getDay()] + ', ' + fmt(t) + '</div>' +
-    '<div class="hero-line"><span class="pill" style="background-color:' + hexA(TYPE_COLOR[r[0]], 0.15) + ';color:' + TYPE_COLOR[r[0]] + '">' + r[0] + '</span> &nbsp;<b style="color:#eeeeee">' + (r[0] === 'gym' ? r[1].replace(/Gym [ABC]/, 'Gym ' + pickW) : r[1]) + '</b><br>' + r[2] + '</div>' +
-    '<div class="wkdots">' + dots + '<div class="small muted" style="margin-left:4px">' + Math.min(gyms.length, 3) + ' of 3 gym sessions this week' + (extra ? ' (+' + extra + ' bonus)' : '') + '</div></div>';
+    '<div class="hero-line"><span class="pill" style="background-color:' + hexA(TYPE_COLOR[r[0]], 0.15) + ';color:' + TYPE_COLOR[r[0]] + '">' + r[0] + '</span> &nbsp;<b style="color:#eeeeee">' + (r[0] === 'gym' ? r[1].replace(/Gym [ABC]/, pickW === 'D' ? 'Optional Workout D' : 'Gym ' + pickW) : r[1]) + '</b><br>' + r[2] + '</div>' +
+    '<div class="wkdots">' + dots + '<div class="small muted" style="margin-left:4px">' + Math.min(gyms.length, 3) + ' of 3 this week' + (extra ? ' (+' + extra + ' extra)' : '') + (dDone ? ' + D' : ' · D optional') + '</div></div>';
+  renderCover();
   document.getElementById('baseCard').style.display = (!base && (!baseline() || dayDiff(parse(PLAN_START), t) <= 7)) ? 'block' : 'none';
   const last = weighIns().slice(-1)[0]; if (last && !document.getElementById('baseIn').value) document.getElementById('baseIn').placeholder = 'Last logged: ' + last.w;
   document.querySelectorAll('#modeSeg button').forEach(b => b.classList.toggle('on', b.getAttribute('data-m') === mode));
@@ -593,13 +709,25 @@ function renderToday() {
   renderSession(p, S, ph);
   renderHabits(S);
 }
+function renderCover() {
+  const t = today(), c = coverage(t.getFullYear(), t.getMonth()), hit = PARTS.filter(x => c[x[0]] > 0).length;
+  const mins = weekCardio(mondayOf(t)), pct = Math.min(100, Math.round(mins / CARDIO_TARGET * 100));
+  const gaps = PARTS.filter(x => !c[x[0]]).map(x => x[1]), rec = recommendD(t);
+  let h = '<div class="row between"><div class="section-title" style="margin-bottom:0">' + MON_FULL[t.getMonth()] + ' coverage</div><div class="kicker">' + hit + ' of 8 areas</div></div>';
+  h += '<div class="cgrid">' + PARTS.map(x => '<div class="ctile' + (c[x[0]] ? ' hit' : '') + '"><div class="ctile-n">' + (c[x[0]] ? '✓ ' + c[x[0]] : '0') + '</div><div class="ctile-l">' + x[1] + '</div></div>').join('') + '</div>';
+  h += '<div class="small" style="margin-top:12px;line-height:1.5;color:#bdbdbd">' + (gaps.length ? 'Still to hit: <b style="color:#ffffff">' + gaps.join(', ') + '</b>. ' : 'All eight covered this month. ') + 'Optional Workout D: <b style="color:#f97316">' + DFORMATS[rec.f].name + '</b>.</div>';
+  h += '<div class="row between" style="margin-top:14px"><div class="kicker">Cardio this week</div><div class="small"><b style="color:#ffffff">' + mins + '</b> / ' + CARDIO_TARGET + ' min</div></div><div class="pbar"><div class="pbar-fill" style="width:' + pct + '%"></div></div>';
+  document.getElementById('coverCard').innerHTML = h;
+}
 function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')'; }
 function exRx(e, ph) { return ph.rounds + ' × ' + (e[4] || ph.reps); }
+function letterChips() { return '<div class="chips tight">' + ['A','B','C','D'].map(L => '<button class="chip' + (L === pickW ? ' on' : '') + '" onclick="pick(\'' + L + '\')">' + L + '</button>').join('') + '</div>'; }
 function renderSession(p, S, ph) {
+  if (pickW === 'D') return renderD();
   const W = S.w[pickW], mi = MODE_IDX[mode];
   const keepDate = document.getElementById('sDate') ? document.getElementById('sDate').value : ymd(today());
   let h = '<div class="row between"><div><div class="kicker">Workout ' + pickW + ' · ~33 min</div><div class="wo-title" style="margin-top:4px">' + W.name + '</div></div>' +
-    '<div class="chips">' + ['A','B','C'].map(L => '<button class="chip' + (L === pickW ? ' on' : '') + '" onclick="pick(\'' + L + '\')">' + L + '</button>').join('') + '</div></div>' +
+    letterChips() + '</div>' +
     '<div class="rx"><b>' + ph.name + ' week: ' + ph.rounds + ' rounds × ' + ph.reps + ' reps.</b> ' + ph.note + '<br><span style="color:#8a8a8a">Warm-up: ' + S.warm + '</span></div>';
   let idx = 0;
   W.loops.forEach((L, li) => {
@@ -613,6 +741,24 @@ function renderSession(p, S, ph) {
   h += '<div style="height:12px"></div><button class="btn" onclick="saveSession()">SAVE WORKOUT ' + pickW + '</button>';
   document.getElementById('sessionCard').innerHTML = h;
 }
+function renderD() {
+  const mi = MODE_IDX[mode], rec = recommendD(today());
+  if (!dFmt) dFmt = rec.f; // lock the shown format so it can't change before saving
+  const f = dFmt, F = DFORMATS[f];
+  const keepDate = document.getElementById('sDate') ? document.getElementById('sDate').value : ymd(today());
+  let h = '<div class="row between"><div><div class="kicker">Workout D · optional · ~30 min</div><div class="wo-title" style="margin-top:4px">' + F.name + '</div></div>' + letterChips() + '</div>';
+  h += '<div class="chips fmt" style="margin-top:12px">' + D_ORDER.map(k => '<button class="chip' + (k === f ? ' on' : '') + '" onclick="pickD(\'' + k + '\')">' + DFORMATS[k].short + (k === rec.f ? ' ★' : '') + '</button>').join('') + '</div>';
+  h += '<div class="rx">' + (f === rec.f ? '<b>★ Recommended. ' + rec.why + '</b> ' : '<b>★ marks the recommended format.</b> ') + F.why + '</div>';
+  let idx = 0;
+  F.segs.forEach(sg => {
+    h += '<div class="loop-h"><div class="loop-name">' + sg.st + '</div></div>';
+    sg.ex.forEach(e => { h += exRow(e, idx, mi, e[4]); idx++; });
+  });
+  h += '<div class="row" style="margin-top:14px"><div class="small muted" style="flex-shrink:0">Date</div><input class="input date" type="date" id="sDate" value="' + keepDate + '" max="' + ymd(today()) + '"></div>';
+  h += '<div style="height:12px"></div><button class="btn" onclick="saveSession()">SAVE WORKOUT D</button>';
+  document.getElementById('sessionCard').innerHTML = h;
+}
+function pickD(k) { dFmt = k; checks = {}; renderToday(); }
 function exRow(e, i, mi, rx) {
   const names = [e[0], e[1] || e[0], e[2] || e[0]], tags = ['Gym','Swap','Home'];
   let alts = '';
@@ -628,20 +774,27 @@ function pick(L) { pickW = L; checks = {}; renderToday(); }
 function setMode(m) { mode = m; store('gl2_mode', m); renderToday(); }
 function saveSession() {
   const d = sessionDate(); if (d > today()) { toast('Pick today or an earlier date'); return; }
-  const p = position(d), total = 7, n = Object.keys(checks).filter(k => checks[k]).length;
+  const isD = pickW === 'D', f = isD ? (dFmt || recommendD(today()).f) : null;
+  const p = position(d), total = isD ? dCount(f) : 7, n = Object.keys(checks).filter(k => checks[k]).length;
   const dupe = sess.find(s => s.kind === 'gym' && s.iso === ymd(d) && s.w === pickW);
   if (dupe && !confirm('Workout ' + pickW + ' is already logged for ' + fmt(d) + '. Log it again?')) return;
-  sess.push({ id:'s' + uid(), iso:ymd(d), kind:'gym', w:pickW, season:p.b.s, blk:p.bi, wk:p.wk, mode:mode, done:n, of:total, ts:Date.now() });
+  const rec = { id:'s' + uid(), iso:ymd(d), kind:'gym', w:pickW, season:p.b.s, blk:p.bi, wk:p.wk, mode:mode, done:n, of:total, ts:Date.now() };
+  if (isD) rec.f = f; else rec.fin = !!checks[6];
+  sess.push(rec);
   store('gl2_sess', sess);
-  checks = {}; pickW = null;
-  toast('Workout logged · ' + n + '/' + total + ' checked');
+  checks = {}; pickW = null; dFmt = null;
+  const sd = document.getElementById('sDate'); if (sd) sd.value = ymd(today());
+  toast((isD ? 'Workout D logged · ' : 'Workout logged · ') + n + '/' + total + ' checked');
   renderToday(); header();
 }
 function logActivity(kind) {
   const d = sessionDate(); if (d > today()) { toast('Pick today or an earlier date'); return; }
-  sess.push({ id:'s' + uid(), iso:ymd(d), kind:kind, ts:Date.now() });
+  const mEl = document.getElementById('actMin'), mv = parseInt(mEl && mEl.value, 10), min = mv > 0 && mv < 600 ? mv : DEF_MIN[kind];
+  sess.push({ id:'s' + uid(), iso:ymd(d), kind:kind, min:min, ts:Date.now() });
   store('gl2_sess', sess);
-  toast(KIND_LABEL[kind] + ' logged for ' + fmt(d));
+  if (mEl) mEl.value = '';
+  toast(KIND_LABEL[kind] + ' · ' + min + ' min · ' + fmt(d));
+  renderCover();
 }
 function renderHabits(S) {
   const k = ymd(sessionDate()), h = habits[k] || {};
@@ -665,7 +818,7 @@ function renderPlan() {
   const t = today(), td = planSeason === cur ? dowIdx(t) : -1;
   document.getElementById('rhythm').innerHTML = S.rhythm.map((r, i) =>
     '<div class="rday' + (i === td ? ' today' : '') + '"><div class="rdow">' + DOW[i] + '</div><div class="rdot" style="background-color:' + TYPE_COLOR[r[0]] + '"></div><div><div class="rtitle">' + r[1] + '</div><div class="rnote">' + r[2] + '</div></div></div>').join('') +
-    '<div class="small muted" style="margin-top:6px;line-height:1.45">The three gym sessions are the non-negotiable. Days are a default: miss Monday and the app moves A to the next day you train.</div>';
+    '<div class="small muted" style="margin-top:6px;line-height:1.45">The three gym sessions are the non-negotiable. Days are a default: miss Monday and the app moves A to the next day you train. Optional Workout D fits any morning you are not lifting; Tuesday or Thursday at 6:45 works best.</div>';
   let h = '';
   ['A','B','C'].forEach(L => {
     const W = S.w[L];
@@ -679,7 +832,20 @@ function renderPlan() {
     });
     h += '<div class="loop-h" style="margin-top:6px"><div class="loop-name">Finisher</div></div><div class="plan-ex-alt" style="margin-top:0">' + W.fin[0] + '<br>Swap: ' + W.fin[1] + '<br>Home: ' + W.fin[2] + '</div></div></div>';
   });
+  h += '<div class="wo-card"><div class="wo-head" onclick="this.parentElement.classList.toggle(\'open\')"><div class="wo-letter" style="border:1px dashed #f97316">D</div><div><div class="rtitle">Optional engine session</div><div class="rnote">4 cardio-led formats · the app picks what your month needs</div></div><div class="chev">▾</div></div><div class="wo-body">';
+  D_ORDER.forEach(k => {
+    const F = DFORMATS[k];
+    h += '<div class="loop-h" style="margin-top:10px"><div class="loop-name">' + F.name + '</div><div class="loop-station">~30 min · ' + F.tags.map(partName).join(', ') + '</div></div><div class="plan-ex-alt" style="margin:0 0 4px">' + F.why + '</div>';
+    F.segs.forEach(sg => sg.ex.forEach(e => {
+      const alt = (e[1] && e[1] !== e[0] ? 'Swap: ' + e[1] : '') + (e[2] && e[2] !== e[0] ? (e[1] && e[1] !== e[0] ? '<br>' : '') + 'Home: ' + e[2] : '');
+      h += '<div class="plan-ex"><div class="row between"><div class="plan-ex-name">' + e[0] + '</div><div class="small" style="color:#f97316;white-space:nowrap">' + e[4] + '</div></div>' + (alt ? '<div class="plan-ex-alt">' + alt + '</div>' : '') + '</div>';
+    }));
+  });
+  h += '</div></div>';
   document.getElementById('planWorkouts').innerHTML = h;
+  const src = { push:'Workouts A and C every week', pull:'Workouts B and C every week', legs:'Workouts A and C, plus soccer', hinge:'Workout B every week', core:'Workout C, plus D Intervals or D Mobility', steady:'Walks, golf and indoor cardio of 20+ min, or D Zone 2', intervals:'D Intervals, D Circuit, or soccer', mobility:'D Mobility, or 10 min of logged stretching' };
+  document.getElementById('planCover').innerHTML = '<div class="para" style="margin-bottom:10px">The aim is every area at least once a month. Strength is covered by the weekly three. Intervals and mobility are the ones that slip, so Workout D defaults to whichever is missing.</div><table class="ptable"><tr><th>Area</th><th>Where it comes from</th></tr>' +
+    PARTS.map(x => '<tr><td><b>' + x[1] + '</b></td><td>' + src[x[0]] + '</td></tr>').join('') + '</table><div class="small muted" style="margin-top:10px;line-height:1.5">Cardio target: 150 minutes a week of moderate effort, the standard adult guideline. Your walks usually cover it; finishers and Workout D add the rest.</div>';
   const p = position(t), curPh = phaseKey(p.b.weeks, p.wk);
   document.getElementById('phaseTable').innerHTML = '<table class="ptable"><tr><th>Phase</th><th>Sets × reps</th><th>Intent</th></tr>' +
     ['base','build','push','deload'].map(k => { const P = PHASES[k]; return '<tr class="' + (k === curPh && planSeason === cur ? 'cur' : '') + '"><td><b>' + P.name + '</b></td><td style="white-space:nowrap">' + P.rounds + ' × ' + P.reps + '</td><td>' + P.note + '</td></tr>'; }).join('') +
@@ -728,6 +894,13 @@ function renderProgress() {
   } else { lostEl.textContent = '--'; paceEl.textContent = '--'; }
   document.getElementById('stStreak').textContent = weekStreak();
   renderChart();
+  // coverage by month, newest first, from plan start
+  const st = parse(PLAN_START); let rows = '';
+  for (let d = new Date(t.getFullYear(), t.getMonth(), 1), i = 0; d >= new Date(st.getFullYear(), st.getMonth(), 1) && i < 12; d = new Date(d.getFullYear(), d.getMonth() - 1, 1), i++) {
+    const c = coverage(d.getFullYear(), d.getMonth()), n = PARTS.filter(x => c[x[0]]).length;
+    rows += '<tr><td>' + MON[d.getMonth()] + " '" + String(d.getFullYear()).slice(2) + ' <span class="' + (n === 8 ? 'good' : 'muted') + '">' + n + '/8</span></td>' + PARTS.map(x => '<td><span class="cdot' + (c[x[0]] ? ' hit' : '') + '" title="' + x[1] + ': ' + c[x[0]] + '"></span></td>').join('') + '</tr>';
+  }
+  document.getElementById('coverHist').innerHTML = '<table class="ctable"><tr><th>Month</th>' + PARTS.map(x => '<th>' + x[2] + '</th>').join('') + '</tr>' + rows + '</table><div class="small muted" style="margin-top:8px">Z2 = steady cardio · HIIT = intervals · Mob = mobility. Green = hit at least once.</div>';
   // monthly checkpoints
   let mh = '';
   if (b) {
@@ -750,7 +923,7 @@ function renderProgress() {
   // sessions
   const ss = allSessions();
   document.getElementById('sHist').innerHTML = ss.length ? ss.slice(0, renderProgress.sn || 12).map(s => {
-    const label = s.legacy ? s.label : s.kind === 'gym' ? 'Workout ' + s.w + ' · ' + SEASONS[s.season].w[s.w].name + (s.mode && s.mode !== 'gym' ? ' (' + (s.mode === 'home' ? 'home' : 'swaps') + ')' : '') : KIND_LABEL[s.kind];
+    const label = s.legacy ? s.label : s.kind === 'gym' ? 'Workout ' + s.w + ' · ' + (s.w === 'D' ? (DFORMATS[s.f] ? DFORMATS[s.f].name : 'Optional') : SEASONS[s.season].w[s.w].name) + (s.mode && s.mode !== 'gym' ? ' (' + (s.mode === 'home' ? 'home' : 'swaps') + ')' : '') : KIND_LABEL[s.kind] + (s.min ? ' · ' + s.min + ' min' : '');
     return '<div class="li"><span class="qdot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background-color:' + (TYPE_COLOR[s.kind] || '#555555') + '"></span><div class="li-date">' + fmt(parse(s.iso), true) + '</div><div class="li-main">' + label + '</div>' + (s.legacy ? '' : '<button class="li-del" onclick="delSess(\'' + s.id + '\')" aria-label="Delete">✕</button>') + '</div>';
   }).join('') + (ss.length > (renderProgress.sn || 12) ? '<button class="showmore" onclick="renderProgress.sn=(renderProgress.sn||12)+25;renderProgress()">Show more (' + ss.length + ' total)</button>' : '') : '<div class="empty">No sessions yet.</div>';
 }
