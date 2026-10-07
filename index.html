@@ -161,10 +161,15 @@ button, input { font-family: 'DM Sans', -apple-system, sans-serif; -webkit-appea
 .sday.fut .snum { color: #8a8a8a; }
 .sdow { font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 .snum { font-family: 'Bebas Neue', sans-serif; font-size: 21px; line-height: 1; color: #f0f0f0; }
-.sm { font-size: 10px; font-weight: 800; height: 16px; line-height: 16px; padding: 0 4px; border-radius: 5px; }
-.sm.gym { color: #f97316; border: 1px solid #f97316; line-height: 14px; }
-.sm.done { background-color: #22c55e; color: #0a0a0a; }
+.smk { font-size: 10px; font-weight: 800; height: 16px; line-height: 16px; padding: 0 4px; border-radius: 5px; }
+.smk.gym { color: #f97316; border: 1px solid #f97316; line-height: 14px; }
+.smk.done { background-color: #22c55e; color: #0a0a0a; }
 .sdot { width: 8px; height: 8px; border-radius: 50%; margin: 4px 0; }
+.sday.pzday { background-color: rgba(251,113,133,0.07); }
+.lg-box { width: 12px; height: 10px; background-color: rgba(251,113,133,0.22); display: inline-block; border-radius: 2px; }
+.banner.rose { background-color: rgba(251,113,133,0.08); border-color: #fb7185; color: #fde2e6; }
+.banner.rose button { background-color: #fb7185; }
+.banner.rose button.ghost { background-color: transparent; color: #fde2e6; border-color: #fb7185; }
 .sact { position: absolute; top: 5px; right: 5px; width: 5px; height: 5px; border-radius: 50%; background-color: #22c55e; }
 .makeup { margin-top: 10px; font-size: 12.5px; color: #facc15; background-color: rgba(250,204,21,0.08); border: 1px solid rgba(250,204,21,0.35); border-radius: 10px; padding: 8px 10px; line-height: 1.4; }
 .srow2 { display: flex; align-items: center; gap: 10px; }
@@ -227,6 +232,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
   <!-- TODAY -->
   <div class="page active" id="page-today">
     <div class="banner" id="nudge" style="display:none"></div>
+    <div class="banner rose" id="pauseNote" style="display:none"></div>
     <div class="card" id="todayHero"></div>
     <div class="card" id="baseCard" style="display:none">
       <div class="section-title">Set your starting weight</div>
@@ -297,7 +303,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
         <div class="chips"><button class="chip on" id="rgYear" onclick="setRange('year')">Plan year</button><button class="chip" id="rgAll" onclick="setRange('all')">All time</button></div></div>
       <div class="chart-wrap" id="chart"></div>
       <div class="chart-tip" id="chartTip">Touch the chart to read a weigh-in.</div>
-      <div class="legend"><span><i class="lg-line"></i>Your weigh-ins</span><span><i class="lg-dash"></i>0.5 lb/week pace</span><span><i class="lg-dash2"></i>1 lb/week stretch</span></div>
+      <div class="legend"><span><i class="lg-line"></i>Your weigh-ins</span><span><i class="lg-dash"></i>0.5 lb/week pace</span><span><i class="lg-dash2"></i>1 lb/week stretch</span><span><i class="lg-box"></i>Planned break</span></div>
     </div>
     <div class="card"><div class="section-title">Strength</div><div class="list" id="liftHist"></div></div>
     <div class="card"><div class="section-title">Fuel</div><div id="fuelHist"></div></div>
@@ -318,6 +324,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
       <input type="file" id="impFile" accept=".json,application/json,text/plain" style="display:none" onchange="importFile(this)">
       <div class="small muted" style="margin-top:10px" id="dataCounts"></div>
     </div>
+    <div class="card"><div class="section-title">Planned breaks</div><div id="pauseList"></div></div>
     <div class="card">
       <div class="section-title">Starting weight</div>
       <div class="para" id="baseInfo" style="margin-bottom:12px"></div>
@@ -325,7 +332,7 @@ textarea.input { width: 100%; min-height: 90px; font-size: 12px; font-family: ui
     </div>
     <div class="card">
       <div class="section-title">About this plan</div>
-      <div class="para">52 weeks, Oct 5 2026 to Oct 3 2027. Three gym sessions a week at 33 minutes (40 with a bonus exercise and a longer finisher), built as two loops of three exercises at a single station, plus an optional cardio-led Workout D in weeks you have room. The goal is all eight key areas at least once a month and 150 minutes of cardio a week. Each season swaps the exercise menu for variety and matches Chicago weather: outdoor walks in fall, spring and summer, indoor finishers in winter. Target pace is 0.5 lb a week, roughly 250 calories a day under maintenance. Machine layouts differ by gym, so if a loop crosses your floor, use the gym swap for that exercise.</div>
+      <div class="para">52 training weeks starting Oct 5 2026. Planned breaks, like the baby weeks, push the end date back so you never lose a week of the plan. Three gym sessions a week at 33 minutes (40 with a bonus exercise and a longer finisher), built as two loops of three exercises at a single station, plus an optional cardio-led Workout D in weeks you have room. The goal is all eight key areas at least once a month and 150 minutes of cardio a week. Each season swaps the exercise menu for variety and matches Chicago weather: outdoor walks in fall, spring and summer, indoor finishers in winter. Target pace is 0.5 lb a week, roughly 250 calories a day under maintenance. Machine layouts differ by gym, so if a loop crosses your floor, use the gym swap for that exercise.</div>
     </div>
   </div>
 </div>
@@ -617,6 +624,18 @@ DFORMATS.steady.long    = { seg:1, ex:0, rx:'35 min', cardio:40 };
 DFORMATS.intervals.long = { seg:1, ex:0, rx:'12 rounds · 24 min', cardio:30 };
 DFORMATS.circuit.long   = { seg:1, st:'EMOM · 28 min · 7 rounds', cardio:33 };
 DFORMATS.mobility.long  = { seg:0, ex:0, rx:'25 min', cardio:25 };
+// Break-week option: short, at home, no equipment, skip without guilt
+DFORMATS.anytime = { name:'Anytime 15', short:'Anytime 15', tags:['legs','push','pull','core'], cardio:10,
+  why:'Fifteen minutes at home whenever a window opens, nap time included. No equipment needed, and skipping it costs you nothing.',
+  segs:[
+    { st:'2 rounds, easy pace', ex:[
+      ['Bodyweight Squat','Bodyweight Squat','Bodyweight Squat','Smooth and controlled.','12'],
+      ['Push-ups (hands on a counter or couch)','Push-ups (hands on a counter or couch)','Push-ups (hands on a counter or couch)','Body in one straight line.','10'],
+      ['Backpack Row (or DB Row)','Backpack Row (or DB Row)','Backpack Row (or DB Row)','Brace a hand on a chair.','12 each side'],
+      ['Glute Bridge','Glute Bridge','Glute Bridge','Squeeze at the top.','15'],
+      ['Dead Bug','Dead Bug','Dead Bug','Low back stays on the floor.','8 each side'] ] },
+    { st:'Optional', ex:[['Walk around the block','Walk around the block','Walk around the block','Fresh air counts.','10 min']] } ],
+  long:{ seg:1, ex:0, rx:'20 min', cardio:20 } };
 const PSLOTS = [['pb','Breakfast'],['pl','Lunch'],['pd','Dinner'],['ps','Shake / snack']];
 const GYM_SLOT = { 0:'A', 2:'B', 4:'C' };
 const MON_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -639,6 +658,8 @@ let habits = load('gl2_hab', {});
 let base = load('gl2_base', null);
 let mode = load('gl2_mode', 'gym');
 let len = load('gl2_len', 33);
+let pauses = load('gl2_pause', null);
+if (!Array.isArray(pauses)) { pauses = [{ start:'2026-10-19', weeks:2, label:'Baby weeks' }]; store('gl2_pause', pauses); }
 let _lastId = 0;
 function uid() { const n = Math.max(Date.now(), _lastId + 1); _lastId = n; return n; }
 let selDate = null, lv = {}, curNames = [], curFin = -1, curFinMin = 0, curTotal = 0, PRESETS = [];
@@ -655,18 +676,39 @@ function dowIdx(d) { return (d.getDay() + 6) % 7; }
 function fmt(d, yr) { return MON[d.getMonth()] + ' ' + d.getDate() + (yr ? ', ' + d.getFullYear() : ''); }
 function today() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
 
+/* Planned breaks: whole weeks (Mon to Sun) with no targets. Training weeks skip them,
+   so the plan resumes where it left off and later blocks shift back. */
+function PW() { const o = {}; pauses.forEach(p => { const m = mondayOf(parse(p.start)); for (let i = 0; i < p.weeks; i++) o[ymd(addDays(m, 7 * i))] = p.label || 'Break'; }); return o; }
+function pauseAt(d) { return PW()[ymd(mondayOf(d))] || null; }
+function pauseInfo(d) {
+  const k = ymd(mondayOf(d));
+  for (const p of pauses) { const m = mondayOf(parse(p.start)); for (let i = 0; i < p.weeks; i++) if (ymd(addDays(m, 7 * i)) === k) return { label:p.label || 'Break', wk:i + 1, of:p.weeks, start:m, resume:addDays(m, 7 * p.weeks) }; }
+  return null;
+}
+function trainWeekIndex(d) {
+  const start = parse(PLAN_START), w = Math.floor(dayDiff(start, d) / 7), pw = PW(); let n = 0;
+  for (let i = 0; i < w; i++) if (!pw[ymd(addDays(start, 7 * i))]) n++;
+  return n;
+}
+function trainWeekDate(idx) {
+  const start = parse(PLAN_START), pw = PW(); let n = -1;
+  for (let i = 0; i < 400; i++) { const m = addDays(start, 7 * i); if (!pw[ymd(m)] && ++n === idx) return m; }
+  return addDays(start, 7 * idx);
+}
+function blockStart(bi) { let acc = 0; for (let i = 0; i < bi; i++) acc += BLOCKS[i].weeks; return trainWeekDate(acc); }
+function blockEndI(bi) { let acc = 0; for (let i = 0; i <= bi; i++) acc += BLOCKS[i].weeks; return addDays(trainWeekDate(acc - 1), 6); }
+function planEnd() { return blockEndI(BLOCKS.length - 1); }
+function trainWeeks(d) { if (dayDiff(parse(PLAN_START), d) < 0) return 0; return trainWeekIndex(d) + (pauseAt(d) ? 0 : dowIdx(d) / 7); }
 function position(d) {
   const start = parse(PLAN_START);
-  const diff = dayDiff(start, d);
-  if (diff < 0) return { pre:true, bi:0, wk:1, overall:0, b:BLOCKS[0] };
-  let w = Math.floor(diff / 7);
-  const overall = w + 1;
+  if (dayDiff(start, d) < 0) return { pre:true, bi:0, wk:1, overall:0, b:BLOCKS[0] };
+  const w = trainWeekIndex(d), overall = w + 1, pz = pauseInfo(d);
   let acc = 0;
   for (let i = 0; i < BLOCKS.length; i++) {
-    if (w < acc + BLOCKS[i].weeks) return { bi:i, wk:w - acc + 1, overall:overall, b:BLOCKS[i] };
+    if (w < acc + BLOCKS[i].weeks) return { bi:i, wk:w - acc + 1, overall:overall, b:BLOCKS[i], pause:pz };
     acc += BLOCKS[i].weeks;
   }
-  return { done:true, bi:BLOCKS.length - 1, wk:BLOCKS[BLOCKS.length - 1].weeks, overall:overall, b:BLOCKS[BLOCKS.length - 1] };
+  return { done:true, bi:BLOCKS.length - 1, wk:BLOCKS[BLOCKS.length - 1].weeks, overall:overall, b:BLOCKS[BLOCKS.length - 1], pause:pz };
 }
 function phaseKey(weeks, wk) {
   if (wk >= weeks) return 'deload';
@@ -674,7 +716,6 @@ function phaseKey(weeks, wk) {
   if (weeks >= 8) return wk <= 3 ? 'base' : 'build';
   return wk <= 2 ? 'base' : 'build';
 }
-function blockEnd(b) { return addDays(parse(b.start), b.weeks * 7 - 1); }
 
 /* ================= DATA HELPERS ================= */
 function weighIns() {
@@ -732,6 +773,7 @@ function weekCardio(monday) {
 }
 function recommendD(d) {
   const p = position(d);
+  if (p.pause) return { f:'anytime', why:p.pause.label + ': no targets. Fifteen minutes if a window opens, nothing if it does not.' };
   if (!p.pre && phaseKey(p.b.weeks, p.wk) === 'deload') return { f:'mobility', why:'Deload week, so keep it light.' };
   const c = coverage(d.getFullYear(), d.getMonth()), gaps = PARTS.filter(x => !c[x[0]]).map(x => x[0]);
   const st = (Math.max(1, p.overall || 1) - 1) % 4, order = D_ORDER.slice(st).concat(D_ORDER.slice(0, st));
@@ -749,12 +791,12 @@ function baseline() {
   if (first) return { w:first.w, iso:ymd(first.d), auto:true };
   return null;
 }
-function paceAt(d) { const b = baseline(); if (!b) return null; const wks = Math.max(0, dayDiff(parse(PLAN_START), d) / 7); return b.w - PACE * wks; }
+function paceAt(d, rate) { const b = baseline(); if (!b) return null; return b.w - (rate || PACE) * trainWeeks(d); }
 function weekStreak() {
   let m = mondayOf(today()), n = 0;
-  if (coreInWeek(m).length >= 3) n++;
+  if (!pauseAt(m) && coreInWeek(m).length >= 3) n++;
   m = addDays(m, -7);
-  for (let i = 0; i < 104; i++) { if (coreInWeek(m).length >= 3) { n++; m = addDays(m, -7); } else break; }
+  for (let i = 0; i < 104; i++) { if (pauseAt(m)) { m = addDays(m, -7); continue; } if (coreInWeek(m).length >= 3) { n++; m = addDays(m, -7); } else break; }
   return n;
 }
 
@@ -772,6 +814,7 @@ function showPage(id) {
 }
 function header() {
   const p = position(today());
+  if (p.pause) { document.getElementById('weekBadge').innerHTML = p.pause.label.toUpperCase() + '<br><span style="font-size:11px;color:#c2662a">WEEK ' + p.pause.wk + ' OF ' + p.pause.of + '</span>'; return; }
   document.getElementById('weekBadge').innerHTML = p.pre ? 'STARTS<br>OCT 5' : p.done ? 'YEAR 1<br>COMPLETE' : SEASONS[p.b.s].label.toUpperCase() + ' · WK ' + p.wk + '<br><span style="font-size:11px;color:#c2662a">YEAR WK ' + Math.min(p.overall, 52) + ' / 52</span>';
 }
 
@@ -782,6 +825,7 @@ function daySess(d) { const k = ymd(d); return allSessions().filter(s => s.iso =
 function defaultLetter(d) {
   const logged = daySess(d).filter(s => s.kind === 'gym' && s.w);
   if (logged.length) return logged[0].w;
+  if (pauseAt(d)) return 'D';
   const di = dowIdx(d), done = coreInWeek(mondayOf(d)).map(s => s.w), sched = GYM_SLOT[di];
   if (sched && done.indexOf(sched) < 0) return sched;
   for (const i of [0, 2, 4]) if (i < di && done.indexOf(GYM_SLOT[i]) < 0) return GYM_SLOT[i];
@@ -805,6 +849,7 @@ function renderToday() {
   const d = selDate, p = position(d), S = SEASONS[p.b.s], ph = PHASES[phaseKey(p.b.weeks, p.wk)];
   if (!pickW) pickW = defaultLetter(d);
   renderNudge();
+  renderPauseNote();
   renderHero(d, p, S, ph);
   const t = today();
   document.getElementById('baseCard').style.display = (!base && (!baseline() || dayDiff(parse(PLAN_START), t) <= 7)) ? 'block' : 'none';
@@ -822,18 +867,26 @@ function renderHero(d, p, S, ph) {
   let h = '<div class="strip-h"><button class="sarrow" onclick="shiftWeek(-1)" aria-label="Previous week">‹</button><div class="kicker">' + wkLabel + '</div><button class="sarrow" onclick="shiftWeek(1)" aria-label="Next week"' + (+mon >= +addDays(thisMon, 7) ? ' disabled' : '') + '>›</button></div><div class="strip">';
   for (let i = 0; i < 7; i++) {
     const dd = addDays(mon, i), ss = daySess(dd), rr = SEASONS[position(dd).b.s].rhythm[i];
-    const gym = ss.filter(x => x.kind === 'gym'), act = ss.filter(x => x.kind !== 'gym');
+    const gym = ss.filter(x => x.kind === 'gym'), act = ss.filter(x => x.kind !== 'gym'), pz = pauseAt(dd);
     let mark;
-    if (gym.length) mark = '<span class="sm done">✓' + (gym[0].w || '') + '</span>';
-    else if (rr[0] === 'gym') mark = '<span class="sm gym">' + GYM_SLOT[i] + '</span>';
+    if (gym.length) mark = '<span class="smk done">✓' + (gym[0].w || '') + '</span>';
+    else if (pz) mark = '<span class="sdot" style="background-color:#fb7185"></span>';
+    else if (rr[0] === 'gym') mark = '<span class="smk gym">' + GYM_SLOT[i] + '</span>';
     else mark = '<span class="sdot" style="background-color:' + TYPE_COLOR[rr[0]] + '"></span>';
-    h += '<button class="sday' + (+dd === +d ? ' sel' : '') + (+dd === +t ? ' today' : '') + (dd > t ? ' fut' : '') + '" onclick="selectDay(\'' + ymd(dd) + '\')"><span class="sdow">' + DOW[i] + '</span><span class="snum">' + dd.getDate() + '</span>' + mark + (act.length ? '<span class="sact"></span>' : '') + '</button>';
+    h += '<button class="sday' + (+dd === +d ? ' sel' : '') + (+dd === +t ? ' today' : '') + (dd > t ? ' fut' : '') + (pz ? ' pzday' : '') + '" onclick="selectDay(\'' + ymd(dd) + '\')"><span class="sdow">' + DOW[i] + '</span><span class="snum">' + dd.getDate() + '</span>' + mark + (act.length ? '<span class="sact"></span>' : '') + '</button>';
   }
   h += '</div>';
   const when = +d === +t ? 'Today' : d > t ? 'Upcoming' : 'Past day';
-  const blk = p.pre ? 'Plan starts Monday, Oct 5' : p.done ? 'Year 1 complete' : p.b.name + ' · Week ' + p.wk + ' of ' + p.b.weeks + ' · ' + ph.name;
+  const blk = p.pause ? p.pause.label + ' · week ' + p.pause.wk + ' of ' + p.pause.of : p.pre ? 'Plan starts Monday, Oct 5' : p.done ? 'Year 1 complete' : p.b.name + ' · Week ' + p.wk + ' of ' + p.b.weeks + ' · ' + ph.name;
   h += '<div class="kicker" style="margin-top:14px">' + when + ' · ' + blk + '</div>';
   h += '<div class="hero-date">' + ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()] + ', ' + fmt(d) + '</div>';
+  if (p.pause) {
+    h += '<div class="hero-line"><span class="pill" style="background-color:rgba(251,113,133,0.15);color:#fb7185">break</span> &nbsp;<b style="color:#eeeeee">No targets this week</b><br>Focus on home. Anything you log is a bonus, and nothing here breaks your streak or puts you behind pace. The plan picks back up ' + fmt(p.pause.resume) + ' with ' + p.b.name + ' week ' + p.wk + '.</div>';
+    const n = coreInWeek(mon).length + dInWeek(mon).length;
+    h += '<div class="small" style="margin-top:12px;color:#bdbdbd">' + (n ? '<b style="color:#ffffff">' + n + '</b> bonus session' + (n > 1 ? 's' : '') + ' this week' : 'No sessions needed this week') + '</div>';
+    document.getElementById('todayHero').innerHTML = h;
+    return;
+  }
   h += '<div class="hero-line"><span class="pill" style="background-color:' + hexA(TYPE_COLOR[r[0]], 0.15) + ';color:' + TYPE_COLOR[r[0]] + '">' + r[0] + '</span> &nbsp;<b style="color:#eeeeee">' + r[1] + '</b><br>' + r[2] + '</div>';
   const loggedToday = daySess(d).some(x => x.kind === 'gym');
   if (!loggedToday && pickW !== 'D' && GYM_SLOT[di] !== pickW) h += '<div class="makeup">Make-up day: Workout ' + pickW + ' is still open this week, so it is loaded below. Tap D for the optional session instead.</div>';
@@ -848,13 +901,23 @@ function renderNudge() {
   el.style.display = due ? 'block' : 'none';
   if (due) el.innerHTML = '<b>Back up your log.</b> ' + (last ? 'Your last backup was ' + Math.round((now - last) / 864e5) + ' days ago.' : 'You have not saved a backup yet.') + ' It takes ten seconds and protects everything if Safari data gets cleared.<br><button onclick="exportData()">Back up now</button><button class="ghost" onclick="store(\'gl2_nudge\', Date.now());renderNudge()">Later</button>';
 }
+function renderPauseNote() {
+  const el = document.getElementById('pauseNote'), t = today(), seen = load('gl2_pzseen', '');
+  const up = pauses.map(x => ({ x:x, m:mondayOf(parse(x.start)) })).filter(o => o.m > t && dayDiff(t, o.m) <= 14).sort((a, b) => a.m - b.m)[0];
+  if (!up || seen === up.x.start + ':' + up.x.weeks) { el.style.display = 'none'; return; }
+  const i = pauses.indexOf(up.x), end = addDays(up.m, 7 * up.x.weeks - 1);
+  el.style.display = 'block';
+  el.innerHTML = '<b>' + up.x.label + ' are planned for ' + fmt(up.m) + ' to ' + fmt(end) + '.</b> No targets those ' + (up.x.weeks > 1 ? up.x.weeks + ' weeks' : 'week') + ', and the plan resumes where you left off. If the baby comes early, start them now.<br><button onclick="pzNow(' + i + ')">Start now</button><button class="ghost" onclick="showPage(\'more\')">Adjust dates</button><button class="ghost" onclick="store(\'gl2_pzseen\', \'' + up.x.start + ':' + up.x.weeks + '\');renderPauseNote()">Got it</button>';
+}
 function renderCover() {
   const t = today(), c = coverage(t.getFullYear(), t.getMonth()), hit = PARTS.filter(x => c[x[0]] > 0).length;
   const mins = weekCardio(mondayOf(t)), pct = Math.min(100, Math.round(mins / CARDIO_TARGET * 100));
   const gaps = PARTS.filter(x => !c[x[0]]).map(x => x[1]), rec = recommendD(t);
   let h = '<div class="row between"><div class="section-title" style="margin-bottom:0">' + MON_FULL[t.getMonth()] + ' coverage</div><div class="kicker">' + hit + ' of 8 areas</div></div>';
   h += '<div class="cgrid">' + PARTS.map(x => '<div class="ctile' + (c[x[0]] ? ' hit' : '') + '"><div class="ctile-n">' + (c[x[0]] ? '✓ ' + c[x[0]] : '0') + '</div><div class="ctile-l">' + x[1] + '</div></div>').join('') + '</div>';
-  h += '<div class="small" style="margin-top:12px;line-height:1.5;color:#bdbdbd">' + (gaps.length ? 'Still to hit: <b style="color:#ffffff">' + gaps.join(', ') + '</b>. ' : 'All eight covered this month. ') + 'Optional Workout D: <b style="color:#f97316">' + DFORMATS[rec.f].name + '</b>.</div>';
+  const pz = position(t).pause;
+  if (pz) h += '<div class="small" style="margin-top:12px;line-height:1.5;color:#bdbdbd"><b style="color:#fb7185">' + pz.label + ':</b> no coverage or cardio targets until ' + fmt(pz.resume) + '. Anything logged still counts.</div>';
+  else h += '<div class="small" style="margin-top:12px;line-height:1.5;color:#bdbdbd">' + (gaps.length ? 'Still to hit: <b style="color:#ffffff">' + gaps.join(', ') + '</b>. ' : 'All eight covered this month. ') + 'Optional Workout D: <b style="color:#f97316">' + DFORMATS[rec.f].name + '</b>.</div>';
   h += '<div class="row between" style="margin-top:14px"><div class="kicker">Cardio this week</div><div class="small"><b style="color:#ffffff">' + mins + '</b> / ' + CARDIO_TARGET + ' min</div></div><div class="pbar"><div class="pbar-fill" style="width:' + pct + '%"></div></div>';
   document.getElementById('coverCard').innerHTML = h;
 }
@@ -898,10 +961,11 @@ function renderD(p) {
   if (!dFmt) dFmt = rec.f; // lock the shown format so it can't change before saving
   const f = dFmt, F = DFORMATS[f], X = F.long;
   curNames = []; curFin = -1;
-  let h = '<div class="row between"><div><div class="kicker">Workout D · optional · ~' + (long ? 40 : 30) + ' min</div><div class="wo-title" style="margin-top:4px">' + F.name + '</div></div>' + letterChips() + '</div>';
-  h += '<div class="chips fmt" style="margin-top:12px">' + D_ORDER.map(k => '<button class="chip' + (k === f ? ' on' : '') + '" onclick="pickD(\'' + k + '\')">' + DFORMATS[k].short + (k === rec.f ? ' ★' : '') + '</button>').join('') + '</div>';
+  const order = position(selDate).pause ? ['anytime'].concat(D_ORDER) : D_ORDER;
+  let h = '<div class="row between"><div><div class="kicker">' + (f === 'anytime' ? 'Anytime · optional · ~' + (long ? 25 : 15) : 'Workout D · optional · ~' + (long ? 40 : 30)) + ' min</div><div class="wo-title" style="margin-top:4px">' + F.name + '</div></div>' + letterChips() + '</div>';
+  h += '<div class="chips fmt" style="margin-top:12px">' + order.map(k => '<button class="chip' + (k === f ? ' on' : '') + '" onclick="pickD(\'' + k + '\')">' + DFORMATS[k].short + (k === rec.f ? ' ★' : '') + '</button>').join('') + '</div>';
   const items = [['Session timer', dPreset(f, long, mi)]];
-  if (f === 'mobility') items.push(['Rest 60s', restP(60)]);
+  if (f === 'mobility' || f === 'anytime') items.push(['Rest 60s', restP(60)]);
   h += tbar(items);
   h += '<div class="rx">' + (f === rec.f ? '<b>★ Recommended. ' + rec.why + '</b> ' : '<b>★ marks the recommended format.</b> ') + F.why + '</div>';
   let idx = 0;
@@ -1045,6 +1109,7 @@ function dPreset(f, long, mi) {
     ph.push({ l:'Cool-down', s:300 });
     return { name:'EMOM', phases:ph };
   }
+  if (f === 'anytime') return { name:'Walk', phases:[{ l:'Walk around the block', s:(long ? 20 : 10) * 60 }] };
   return { name:'Steady cardio', phases:[{ l:'Steady cardio', s:(long ? 25 : 15) * 60 }] };
 }
 function ensureAudio() {
@@ -1114,7 +1179,7 @@ function renderPlan() {
   const S = SEASONS[planSeason];
   document.getElementById('seasonChips').innerHTML = ['fall','winter','spring','summer'].map(k =>
     '<button class="chip' + (k === planSeason ? ' on' : '') + '" onclick="planSeason=\'' + k + '\';renderPlan()">' + SEASONS[k].label + (k === cur ? ' · now' : '') + '</button>').join('');
-  const blocks = BLOCKS.filter(b => b.s === planSeason).map(b => b.name + ': ' + fmt(parse(b.start)) + ' to ' + fmt(blockEnd(b), true) + ' (' + b.weeks + ' wks)').join('<br>');
+  const blocks = BLOCKS.map((b, i) => [b, i]).filter(x => x[0].s === planSeason).map(x => x[0].name + ': ' + fmt(blockStart(x[1])) + ' to ' + fmt(blockEndI(x[1]), true) + ' (' + x[0].weeks + ' wks)').join('<br>');
   document.getElementById('seasonHead').innerHTML = '<div class="kicker">' + S.months + ' · ' + S.steps.toLocaleString() + ' steps a day</div><div class="wo-title" style="margin:6px 0 8px">' + S.theme + '</div><div class="para">' + S.why + '</div><div class="small muted" style="margin-top:10px;line-height:1.5">' + blocks + '</div>';
   const t = today(), td = planSeason === cur ? dowIdx(t) : -1;
   document.getElementById('rhythm').innerHTML = S.rhythm.map((r, i) =>
@@ -1154,7 +1219,8 @@ function renderPlan() {
     ['base','build','push','deload'].map(k => { const P = PHASES[k]; return '<tr class="' + (k === curPh && planSeason === cur ? 'cur' : '') + '"><td><b>' + P.name + '</b></td><td style="white-space:nowrap">' + P.rounds + ' × ' + P.reps + '</td><td>' + P.note + '</td></tr>'; }).join('') +
     '</table><div class="small muted" style="margin-top:10px;line-height:1.5">13-week seasons run Base (wks 1 to 4), Build (5 to 8), Push (9 to 12), Deload (13). The shorter Fall blocks skip Push. Timed or counted moves keep their own prescription.</div>';
   document.getElementById('yearTable').innerHTML = '<table class="ptable"><tr><th>Block</th><th>Dates</th><th>Pace target</th></tr>' +
-    BLOCKS.map((b, i) => { const end = blockEnd(b), pt = paceAt(end); return '<tr class="' + (i === p.bi && !p.pre ? 'cur' : '') + '"><td><b>' + b.name + '</b><br><span class="muted">' + SEASONS[b.s].theme + '</span></td><td>' + fmt(parse(b.start)) + ' to ' + fmt(end) + '</td><td>' + (pt ? pt.toFixed(1) + ' lbs' : 'Set start weight') + '</td></tr>'; }).join('') + '</table>';
+    BLOCKS.map((b, i) => { const end = blockEndI(i), pt = paceAt(end); return '<tr class="' + (i === p.bi && !p.pre && !p.pause ? 'cur' : '') + '"><td><b>' + b.name + '</b><br><span class="muted">' + SEASONS[b.s].theme + '</span></td><td>' + fmt(blockStart(i)) + ' to ' + fmt(end) + '</td><td>' + (pt ? pt.toFixed(1) + ' lbs' : 'Set start weight') + '</td></tr>'; }).join('') + '</table>' +
+    (pauses.length ? '<div class="small muted" style="margin-top:10px;line-height:1.5">Planned breaks: ' + pauses.map(x => { const m = mondayOf(parse(x.start)); return x.label + ' ' + fmt(m) + ' to ' + fmt(addDays(m, 7 * x.weeks - 1)); }).join('; ') + '. The dates above already make room for them.</div>' : '');
 }
 
 /* ================= PROGRESS ================= */
@@ -1267,10 +1333,10 @@ function renderChart() {
   const el = document.getElementById('chart'), wi = weighIns(), b = baseline(), t = today(), start = parse(PLAN_START);
   let x0 = range === 'year' ? addDays(start, -21) : (wi[0] ? wi[0].d : addDays(start, -21));
   if (range === 'year' && wi.length) { const firstIn = wi.find(e => e.d >= x0); if (!firstIn) x0 = addDays(wi[wi.length - 1].d, -7); }
-  const x1 = range === 'year' ? addDays(start, 364) : addDays(t, 30);
+  const x1 = range === 'year' ? planEnd() : addDays(t, 30);
   const pts = wi.filter(e => e.d >= x0 && e.d <= x1);
   const W = 340, H = 190, L = 34, R = 8, T = 10, B = 22;
-  const ys = pts.map(e => e.w); if (b) { ys.push(b.w); ys.push(range === 'year' ? b.w - 52 : b.w - Math.max(0, dayDiff(start, x1) / 7)); }
+  const ys = pts.map(e => e.w); if (b) { ys.push(b.w); ys.push(paceAt(x1, 1)); }
   if (!ys.length) { el.innerHTML = '<div class="empty">Log a weigh-in to start the chart.</div>'; return; }
   let y0 = Math.floor(Math.min.apply(null, ys) - 2), y1 = Math.ceil(Math.max.apply(null, ys) + 2);
   const sx = d => L + (W - L - R) * (d - x0) / (x1 - x0), sy = v => T + (H - T - B) * (y1 - v) / (y1 - y0);
@@ -1282,10 +1348,15 @@ function renderChart() {
   for (let d = mt, i = 0; d <= x1; d = new Date(d.getFullYear(), d.getMonth() + every, 1), i++) s += '<text x="' + sx(d) + '" y="' + (H - 6) + '" fill="#777777" font-size="10" text-anchor="middle">' + MON[d.getMonth()] + (d.getMonth() === 0 ? " '" + String(d.getFullYear()).slice(2) : '') + '</text>';
   // today marker
   if (t >= x0 && t <= x1) s += '<line x1="' + sx(t) + '" x2="' + sx(t) + '" y1="' + T + '" y2="' + (H - B) + '" stroke="#3a3a3a" stroke-width="1"/>';
-  // pace line
-  if (b) { const pe = range === 'year' ? addDays(start, 364) : x1; s += '<line x1="' + sx(start) + '" y1="' + sy(b.w) + '" x2="' + sx(pe) + '" y2="' + sy(paceAt(pe)) + '" stroke="#8a8a8a" stroke-width="2" stroke-dasharray="5 4"/>'; s += '<text x="' + (sx(pe) - 2) + '" y="' + (sy(paceAt(pe)) - 6) + '" fill="#9a9a9a" font-size="10" text-anchor="end">' + paceAt(pe).toFixed(1) + '</text>'; }
-  // stretch line: 1 lb a week
-  if (b) { const pe = range === 'year' ? addDays(start, 364) : x1, wk = Math.max(0, dayDiff(start, pe) / 7), sv = b.w - wk; s += '<line x1="' + sx(start) + '" y1="' + sy(b.w) + '" x2="' + sx(pe) + '" y2="' + sy(sv) + '" stroke="#38bdf8" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/><text x="' + (sx(pe) - 2) + '" y="' + (sy(sv) - 6) + '" fill="#38bdf8" font-size="10" text-anchor="end">' + sv.toFixed(1) + '</text>'; }
+  // planned breaks: shaded weeks
+  Object.keys(PW()).forEach(k => { const m = parse(k), e = addDays(m, 7); if (e > x0 && m < x1) { const a = sx(m < x0 ? x0 : m), z = sx(e > x1 ? x1 : e); s += '<rect x="' + a.toFixed(1) + '" y="' + T + '" width="' + Math.max(1, z - a).toFixed(1) + '" height="' + (H - T - B) + '" fill="#fb7185" opacity="0.13"/>'; } });
+  // pace (0.5 lb/wk) and stretch (1 lb/wk) lines, flat through planned breaks
+  if (b) {
+    const pe = x1 > start ? x1 : start, pl = rate => { const ds = []; for (let d = start; d < pe; d = addDays(d, 7)) ds.push(d); ds.push(pe); return ds.map(d => sx(d).toFixed(1) + ',' + sy(paceAt(d, rate)).toFixed(1)).join(' '); };
+    const pv = paceAt(pe), sv = paceAt(pe, 1);
+    s += '<polyline fill="none" points="' + pl(PACE) + '" stroke="#8a8a8a" stroke-width="2" stroke-dasharray="5 4"/><text x="' + (sx(pe) - 2) + '" y="' + (sy(pv) - 6) + '" fill="#9a9a9a" font-size="10" text-anchor="end">' + pv.toFixed(1) + '</text>';
+    s += '<polyline fill="none" points="' + pl(1) + '" stroke="#38bdf8" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/><text x="' + (sx(pe) - 2) + '" y="' + (sy(sv) - 6) + '" fill="#38bdf8" font-size="10" text-anchor="end">' + sv.toFixed(1) + '</text>';
+  }
   // weigh-in line + points
   if (pts.length > 1) s += '<polyline fill="none" stroke="#f97316" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="' + pts.map(e => sx(e.d).toFixed(1) + ',' + sy(e.w).toFixed(1)).join(' ') + '"/>';
   pts.forEach(e => { s += '<circle cx="' + sx(e.d) + '" cy="' + sy(e.w) + '" r="' + (pts.length > 40 ? 2.5 : 4) + '" fill="#f97316" stroke="#1e1e1e" stroke-width="2"/>'; });
@@ -1308,12 +1379,31 @@ function renderChart() {
 }
 
 /* ================= MORE: BACKUP ================= */
+function renderPauses() {
+  const el = document.getElementById('pauseList'); if (!el) return;
+  pauses.sort((a, b) => a.start < b.start ? -1 : 1);
+  let h = '<div class="para" style="margin-bottom:12px">Weeks with no targets. Your streak and pace line hold still, and the plan resumes at the week you left off, so the year end moves back by the length of the break.</div>';
+  h += pauses.map((x, i) => {
+    const m = mondayOf(parse(x.start)), e = addDays(m, 7 * x.weeks - 1), btn = (lab, fn) => '<button class="chip" onclick="' + fn + '">' + lab + '</button>';
+    return '<div class="li" style="flex-wrap:wrap;margin-bottom:8px"><div class="li-main"><b>' + x.label + '</b><div class="ex-sub">' + fmt(m) + ' to ' + fmt(e, true) + ' · ' + x.weeks + ' week' + (x.weeks > 1 ? 's' : '') + '</div></div>' +
+      '<div class="chips fmt" style="width:100%;margin-top:10px">' + btn('Start this week', 'pzNow(' + i + ')') + btn('1 week earlier', 'pzMove(' + i + ',-1)') + btn('1 week later', 'pzMove(' + i + ',1)') + btn('+ 1 week', 'pzLen(' + i + ',1)') + (x.weeks > 1 ? btn('- 1 week', 'pzLen(' + i + ',-1)') : '') + btn('Remove', 'pzDel(' + i + ')') + '</div></div>';
+  }).join('') || '<div class="empty">No breaks planned.</div>';
+  h += '<button class="btn ghost" style="margin-top:6px" onclick="pzAdd()">Add a 1-week break</button>';
+  el.innerHTML = h;
+}
+function pzSave(msg) { store('gl2_pause', pauses); renderPauses(); header(); if (document.getElementById('page-today').classList.contains('active')) renderToday(); if (msg) toast(msg); }
+function pzNow(i) { pauses[i].start = ymd(mondayOf(today())); pzSave(pauses[i].label + ' start this week'); }
+function pzMove(i, n) { pauses[i].start = ymd(addDays(mondayOf(parse(pauses[i].start)), 7 * n)); pzSave('Moved to ' + fmt(parse(pauses[i].start))); }
+function pzLen(i, n) { pauses[i].weeks = Math.max(1, Math.min(8, pauses[i].weeks + n)); pzSave(pauses[i].label + ': ' + pauses[i].weeks + ' week' + (pauses[i].weeks > 1 ? 's' : '')); }
+function pzDel(i) { if (!confirm('Remove ' + pauses[i].label + '?')) return; pauses.splice(i, 1); pzSave('Break removed'); }
+function pzAdd() { pauses.push({ start:ymd(addDays(mondayOf(today()), 7)), weeks:1, label:'Break' }); pzSave('Break added for next week'); }
 function renderMore() {
+  renderPauses();
   const b = baseline();
   document.getElementById('baseInfo').innerHTML = b ? 'Starting weight: <b style="color:#ffffff">' + b.w + ' lbs</b> (' + fmt(parse(b.iso), true) + (b.auto ? ', taken from your first weigh-in' : '') + '). Year goal at 0.5 lb a week: <b style="color:#ffffff">' + (b.w - PACE * 52).toFixed(1) + ' lbs</b>.' : 'Not set yet. Log a weigh-in to set it.';
   document.getElementById('dataCounts').textContent = 'On this device: ' + wlog.length + ' weigh-ins, ' + sess.length + ' new sessions, ' + Object.keys(legacy).length + ' sessions from the old plan.';
 }
-function backupObj() { return { app:'grind-log', v:2, exported:new Date().toISOString(), data:{ gl_w:wlog, gl_s:legacy, gl2_sess:sess, gl2_hab:habits, gl2_base:base } }; }
+function backupObj() { return { app:'grind-log', v:2, exported:new Date().toISOString(), data:{ gl_w:wlog, gl_s:legacy, gl2_sess:sess, gl2_hab:habits, gl2_base:base, gl2_pause:pauses } }; }
 function exportData() {
   const json = JSON.stringify(backupObj()), name = 'grind-log-backup-' + ymd(today()) + '.json';
   store('gl2_exp', Date.now()); if (document.getElementById('nudge')) renderNudge();
@@ -1335,6 +1425,7 @@ function importFile(inp) {
       const seenS = {}; sess.forEach(s => seenS[s.id] = 1); (d.gl2_sess || []).forEach(s => { if (s && s.id && !seenS[s.id]) { sess.push(s); seenS[s.id] = 1; } });
       Object.keys(d.gl2_hab || {}).forEach(k => { habits[k] = Object.assign({}, d.gl2_hab[k], habits[k] || {}); });
       if (!base && d.gl2_base) base = d.gl2_base;
+      if (Array.isArray(d.gl2_pause)) { d.gl2_pause.forEach(x => { if (x && x.start && !pauses.some(y => y.start === x.start)) pauses.push(x); }); store('gl2_pause', pauses); }
       store('gl_w', wlog); store('gl2_sess', sess); store('gl2_hab', habits); if (base) store('gl2_base', base);
       toast('Backup imported'); renderMore(); header();
     } catch (e) { toast('That file is not a Grind Log backup'); }
