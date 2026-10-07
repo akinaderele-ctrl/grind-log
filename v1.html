@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<title>Grind Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { background-color: #0a0a0a; }
+body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'DM Sans', sans-serif; min-height: 100vh; padding-bottom: 100px; -webkit-text-size-adjust: 100%; }
+.header { background-color: #1a1a1a; border-bottom: 1px solid #333; padding: 20px 20px 0; padding-top: max(20px, env(safe-area-inset-top)); position: -webkit-sticky; position: sticky; top: 0; z-index: 100; }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.app-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: #f97316; }
+.app-subtitle { font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.week-badge { background-color: rgba(249,115,22,0.2); border: 1px solid #f97316; color: #f97316; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; padding: 4px 10px; border-radius: 4px; }
+.tabs { display: flex; border-bottom: 1px solid #333; }
+.tab { flex: 1; padding: 12px 4px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #888; background-color: transparent; border: none; border-bottom: 3px solid transparent; cursor: pointer; }
+.tab.active { color: #f97316 !important; border-bottom-color: #f97316 !important; }
+.content { padding: 20px; }
+.page { display: none; }
+.page.active { display: block; }
+.card { background-color: #222; border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid #333; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; color: #e5e5e5; margin-bottom: 14px; }
+.weight-hero { background-color: #222; border-radius: 16px; padding: 24px; margin-bottom: 16px; text-align: center; border: 1px solid #333; }
+.wlabel { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.wcurrent { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: #f97316; line-height: 1; }
+.wunit { font-size: 18px; color: #888; margin-bottom: 8px; }
+.wrow { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+.wstat { text-align: center; }
+.wval { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #22c55e; }
+.wval.o { color: #f97316; }
+.wval.b { color: #38bdf8; }
+.wlbl { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.plabel { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.pbg { background-color: #333; border-radius: 99px; height: 10px; overflow: hidden; }
+.pfill { background: linear-gradient(90deg, #f97316, #facc15); height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+.input-row { display: flex; gap: 10px; }
+.winput { flex: 1; background-color: #111; border: 1px solid #444; border-radius: 10px; color: #e5e5e5; font-family: 'DM Sans', sans-serif; font-size: 18px; padding: 12px 16px; outline: none; -webkit-appearance: none; }
+.btnlog { background-color: #f97316; color: #fff; border: none; border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; padding: 12px 20px; cursor: pointer; -webkit-appearance: none; }
+.hlist { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.hitem { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background-color: #111; border-radius: 10px; font-size: 14px; }
+.hdate { color: #888; font-size: 12px; }
+.hweight { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #e5e5e5; }
+.dd { font-size: 12px; font-weight: 600; color: #22c55e; }
+.du { font-size: 12px; font-weight: 600; color: #fb7185; }
+.mlist { display: flex; flex-direction: column; gap: 8px; }
+.mitem { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background-color: #111; border-radius: 10px; }
+.mdot { width: 10px; height: 10px; border-radius: 50%; background-color: #444; flex-shrink: 0; }
+.mdot.reached { background-color: #22c55e; }
+.mdot.current { background-color: #f97316; box-shadow: 0 0 8px #f97316; }
+.mmonth { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #888; width: 50px; }
+.mtarget { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #e5e5e5; }
+.mlabel { font-size: 11px; color: #888; }
+.mcheck { margin-left: auto; color: #22c55e; font-size: 18px; }
+.dcards { display: flex; flex-direction: column; gap: 12px; }
+.dcard { background-color: #222; border-radius: 16px; overflow: hidden; border: 1px solid #333; }
+.dheader { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; }
+.ddot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.dname { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; flex: 1; }
+.dbadge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 99px; }
+.dchev { color: #888; font-size: 14px; transition: transform 0.2s; margin-left: 4px; }
+.dcard.open .dchev { transform: rotate(180deg); }
+.dbody { display: none; padding: 0 18px 18px; }
+.dcard.open .dbody { display: block; }
+.tbadge { display: inline-block; font-size: 11px; color: #888; background-color: #111; border-radius: 6px; padding: 4px 10px; margin: 0 4px 8px 0; }
+.jazztag { display: inline-flex; align-items: center; gap: 6px; background-color: rgba(251,113,133,0.15); border: 1px solid #fb7185; color: #fb7185; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; margin: 4px 0 12px; }
+.elist { display: flex; flex-direction: column; gap: 8px; }
+.eitem { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #e5e5e5; }
+.ebullet { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.esets { font-size: 12px; color: #888; margin-left: auto; white-space: nowrap; }
+.divider { border: none; border-top: 1px solid #333; margin: 12px 0; }
+.ctitle { font-size: 12px; color: #fb7185; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.dnote { font-size: 12px; color: #888; margin-top: 10px; font-style: italic; }
+.srow { display: flex; gap: 10px; margin-bottom: 16px; }
+.scard { flex: 1; background-color: #222; border-radius: 12px; padding: 14px; text-align: center; border: 1px solid #333; }
+.snum { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #f97316; line-height: 1; }
+.slbl { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.dgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 16px; }
+.dbtn { aspect-ratio: 1; border-radius: 10px; border: 1px solid #444; background-color: #111; color: #888; font-size: 9px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; -webkit-appearance: none; }
+.dbtn .da { font-family: 'Bebas Neue', sans-serif; font-size: 14px; }
+.dbtn.logged { background-color: rgba(34,197,94,0.15); border-color: #22c55e; color: #22c55e; }
+.dbtn.selected { background-color: rgba(249,115,22,0.2); border-color: #f97316; color: #f97316; }
+.cklist { display: flex; flex-direction: column; gap: 8px; }
+.ckitem { display: flex; align-items: center; gap: 12px; background-color: #111; border-radius: 10px; padding: 12px 14px; cursor: pointer; }
+.ckbox { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #444; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: transparent; font-size: 14px; }
+.ckitem.checked .ckbox { background-color: #22c55e; border-color: #22c55e; color: #fff; }
+.cklabel { font-size: 14px; color: #e5e5e5; }
+.cksub { font-size: 11px; color: #888; }
+.btnsave { width: 100%; background-color: #f97316; color: #fff; border: none; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; padding: 16px; cursor: pointer; margin-top: 16px; -webkit-appearance: none; }
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background-color: #22c55e; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; padding: 10px 24px; border-radius: 99px; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 999; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: #1a1a1a; border-top: 1px solid #333; display: flex; padding: 8px 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); z-index: 200; }
+.nbtn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; background-color: transparent; border: none; cursor: pointer; color: #888; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 0; -webkit-appearance: none; }
+.nbtn.active { color: #f97316 !important; }
+.nicon { font-size: 20px; }
+.empty { color: #888; font-size: 13px; text-align: center; padding: 16px 0; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div><div class="app-title">GRIND LOG</div><div class="app-subtitle">May → October · 50 lb Goal</div></div>
+    <div class="week-badge" id="weekBadge">WEEK 1</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="tab" onclick="showPage('schedule')">Schedule</button>
+    <button class="tab" onclick="showPage('log')">Log</button>
+  </div>
+</div>
+<div class="content">
+  <div class="page active" id="page-dashboard">
+    <div class="weight-hero">
+      <div class="wlabel">Current Weight</div>
+      <div class="wcurrent" id="cw">280</div>
+      <div class="wunit">lbs</div>
+      <div class="wrow">
+        <div class="wstat"><div class="wval" id="lost">0.0</div><div class="wlbl">lbs lost</div></div>
+        <div class="wstat"><div class="wval o" id="togo">50.0</div><div class="wlbl">lbs to go</div></div>
+        <div class="wstat"><div class="wval b" id="pct">0%</div><div class="wlbl">complete</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="plabel"><span>280 lbs</span><span id="plbl">0% to goal</span><span>230 lbs</span></div>
+      <div class="pbg"><div class="pfill" id="pfill" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Log Weight</div>
+      <div class="input-row">
+        <input class="winput" type="number" id="wentry" placeholder="e.g. 278" inputmode="decimal">
+        <button class="btnlog" onclick="logWeight()">LOG</button>
+      </div>
+    </div>
+    <div class="card"><div class="section-title">Milestones</div><div class="mlist" id="mlist"></div></div>
+    <div class="card"><div class="section-title">Weight History</div><div class="hlist" id="hlist"><div class="empty">No entries yet. Log your first weight above.</div></div></div>
+  </div>
+  <div class="page" id="page-schedule"><div class="dcards" id="dcards"></div></div>
+  <div class="page" id="page-log">
+    <div class="srow">
+      <div class="scard"><div class="snum" id="streak">0</div><div class="slbl">Day Streak</div></div>
+      <div class="scard"><div class="snum" id="total">0</div><div class="slbl">Sessions Done</div></div>
+      <div class="scard"><div class="snum" id="weekly">0</div><div class="slbl">This Week</div></div>
+    </div>
+    <div class="card"><div class="section-title">Select Day</div><div class="dgrid" id="dgrid"></div></div>
+    <div class="card" id="cksection" style="display:none">
+      <div class="section-title" id="cktitle">Log Session</div>
+      <div class="cklist" id="cklist"></div>
+      <button class="btnsave" onclick="saveLog()">SAVE SESSION</button>
+    </div>
+  </div>
+</div>
+<div class="bottom-nav">
+  <button class="nbtn active" onclick="showPage('dashboard')"><span class="nicon">📊</span>Dashboard</button>
+  <button class="nbtn" onclick="showPage('schedule')"><span class="nicon">📅</span>Schedule</button>
+  <button class="nbtn" onclick="showPage('log')"><span class="nicon">✅</span>Log</button>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const SW=280,GW=230;
+const TC={gym:'#f97316',walk:'#22c55e',golf:'#38bdf8',rest:'#555'};
+const TB={gym:'rgba(249,115,22,0.2)',walk:'rgba(34,197,94,0.15)',golf:'rgba(56,189,248,0.15)',rest:'#2a2a2a'};
+const SCHED=[
+  {day:'Monday',type:'gym',times:['🏋️ Gym: 6:45am','🚶 Morning walk: before 8:30am','🚶 Evening walk: after 5pm CT'],ex:[{n:'Incline treadmill warm-up',s:'5 min'},{n:'Incline Dumbbell Press',s:'3×10'},{n:'Flat Bench Press',s:'3×10'},{n:'Cable Chest Fly',s:'3×12'},{n:'Seated DB Shoulder Press',s:'3×10'},{n:'Lateral Raises',s:'3×15'},{n:'Tricep Pushdown',s:'3×12'}],jazz:false,note:'Push day — Chest + Shoulders.'},
+  {day:'Tuesday',type:'walk',times:['🚶 Morning walk: before 8:30am','🚶 Evening walk with Jazz: after 5pm CT'],ex:[{n:'2-Mile Morning Walk (brisk)',s:'~30 min'},{n:'2-Mile Evening Walk with Jazz',s:'~30 min'},{n:'Target: 8,000+ steps',s:'All day'}],jazz:true,jazzNote:'Jazz joins the evening walk — pace to her comfort',note:'Walk day. No gym. Hit 8k steps total.'},
+  {day:'Wednesday',type:'gym',times:['🏋️ Gym: 6:45am','🚶 Morning walk: before 8:30am','🚶 Evening walk: after 5pm CT'],ex:[{n:'Lat Pulldown',s:'3×10'},{n:'Seated Cable Row',s:'3×10'},{n:'Single-Arm DB Row',s:'3×10 each'},{n:'Face Pulls (cable)',s:'3×15'},{n:'Dumbbell Curl',s:'3×12'},{n:'Hammer Curl',s:'3×12'}],jazz:false,note:'Pull day — Back + Biceps.'},
+  {day:'Thursday',type:'gym',times:['🏋️ Gym: 6:45am','🚶 Morning walk: before 8:30am','🚶 Evening walk: after 5pm CT'],ex:[{n:'Leg Press',s:'3×12'},{n:'Goblet Squat',s:'3×12'},{n:'Romanian Deadlift',s:'3×10'},{n:'Leg Curl (machine)',s:'3×12'},{n:'Calf Raises',s:'3×15'},{n:'Hip Abductor Machine',s:'3×15'}],jazz:true,jazzNote:'Couples circuit after gym',jazzEx:['Bodyweight Squats — 2×15','Wall Pushups (Jazz) / Pushups (you) — 2×12','Seated Resistance Band Row — 2×15','Hip Circles + Hip Flexor Stretch — 2 each side','Cool-down stretch together — 5 min'],note:'Leg day — biggest fat-burn session. + Couples circuit.'},
+  {day:'Friday',type:'gym',times:['🏋️ Gym: 6:45am','🚶 Morning walk: before 8:30am','🚶 Evening walk: after 5pm CT'],ex:[{n:'Incline Treadmill Walk',s:'25 min / 8–12%'},{n:'Plank',s:'3×45 sec'},{n:'Dead Bug',s:'3×10 each'},{n:'Seated Knee Tucks',s:'3×15'},{n:'Cable Woodchop',s:'3×12 each'},{n:'Bicycle Crunches',s:'3×20'}],jazz:false,note:'Cardio + Abs. Incline walk is the anchor.'},
+  {day:'Saturday',type:'golf',times:['⛳ Golf: Walk the course — no cart'],ex:[{n:'Walk 18 holes (no cart)',s:'4–6 miles'},{n:'Target: 10,000+ steps',s:'Auto-achieved'}],jazz:false,note:'Active recovery. Walking the course is a real workout.'},
+  {day:'Sunday',type:'rest',times:['😴 Rest or optional light walk'],ex:[{n:'Optional light walk',s:'20–30 min'},{n:'Stretch / mobility',s:'10 min'},{n:'Prep meals and week ahead',s:''}],jazz:false,note:'Recovery day. Sleep is training.'},
+];
+const MILES=[{m:'May',t:275,l:'Habit formation'},{m:'Jun',t:267,l:'First 10 lbs'},{m:'Jul',t:258,l:'Halfway mark'},{m:'Aug',t:249,l:'Under 250'},{m:'Sep',t:240,l:'Final stretch'},{m:'Oct',t:230,l:'Goal reached!'}];
+let wlog=JSON.parse(localStorage.getItem('gl_w')||'[]');
+let slog=JSON.parse(localStorage.getItem('gl_s')||'{}');
+let selDay=null,ckd={};
+function save(){localStorage.setItem('gl_w',JSON.stringify(wlog));localStorage.setItem('gl_s',JSON.stringify(slog));}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx=['dashboard','schedule','log'].indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.querySelectorAll('.nbtn')[idx].classList.add('active');
+  if(id==='log')renderLog();
+  if(id==='dashboard')renderDash();
+  if(id==='schedule')renderSched();
+}
+function cw(){return wlog.length?wlog[wlog.length-1].weight:SW;}
+function logWeight(){
+  const v=parseFloat(document.getElementById('wentry').value);
+  if(isNaN(v)||v<100||v>500){toast('Enter a valid weight');return;}
+  const d=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  wlog.push({weight:v,date:d,ts:Date.now()});save();
+  document.getElementById('wentry').value='';renderDash();toast('Weight logged! Keep going');
+}
+function renderDash(){
+  const w=cw(),lost=Math.max(0,SW-w),togo=Math.max(0,w-GW),pct=Math.min(100,Math.round((lost/50)*100));
+  document.getElementById('cw').textContent=w;
+  document.getElementById('lost').textContent=lost.toFixed(1);
+  document.getElementById('togo').textContent=togo.toFixed(1);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('plbl').textContent=pct+'% to goal';
+  const wk=Math.max(1,Math.floor((new Date()-new Date('2025-05-01'))/(7*864e5))+1);
+  document.getElementById('weekBadge').textContent='WEEK '+wk;
+  const ml=document.getElementById('mlist');ml.innerHTML='';
+  MILES.forEach((m,i)=>{
+    const reached=w<=m.t,isCur=!reached&&(i===0||w<=MILES[i-1].t+5);
+    const d=document.createElement('div');d.className='mitem';
+    d.innerHTML='<div class="mdot'+(reached?' reached':isCur?' current':'')+'"></div><div class="mmonth">'+m.m+'</div><div><div class="mtarget">'+m.t+' lbs</div><div class="mlabel">'+m.l+'</div></div>'+(reached?'<div class="mcheck">✓</div>':'');
+    ml.appendChild(d);
+  });
+  const hl=document.getElementById('hlist');
+  if(!wlog.length){hl.innerHTML='<div class="empty">No entries yet. Log your first weight above.</div>';return;}
+  const recent=[...wlog].reverse().slice(0,8);hl.innerHTML='';
+  recent.forEach((e,i)=>{
+    const prev=wlog[wlog.length-1-i-1];let dh='';
+    if(prev){const dt=e.weight-prev.weight;dh='<span class="'+(dt<=0?'dd':'du')+'">'+(dt>0?'+':'')+dt.toFixed(1)+'</span>';}
+    const d=document.createElement('div');d.className='hitem';
+    d.innerHTML='<div class="hdate">'+e.date+'</div><div class="hweight">'+e.weight+' lbs</div>'+dh;
+    hl.appendChild(d);
+  });
+}
+function renderSched(){
+  const c=document.getElementById('dcards');c.innerHTML='';
+  SCHED.forEach(day=>{
+    const col=TC[day.type],bg=TB[day.type];
+    const exH=day.ex.map(e=>'<div class="eitem"><div class="ebullet" style="background-color:'+col+'"></div><span>'+e.n+'</span><span class="esets">'+e.s+'</span></div>').join('');
+    let jH='';
+    if(day.jazz&&day.jazzEx){jH='<hr class="divider"><div class="ctitle">Couples Circuit</div><div class="elist">'+day.jazzEx.map(e=>'<div class="eitem"><div class="ebullet" style="background-color:#fb7185"></div><span>'+e+'</span></div>').join('')+'</div><div class="dnote" style="color:#fb7185;font-style:normal;margin-top:8px;">Jazz does prenatal-safe modifications. Consult OB.</div>';}
+    else if(day.jazz&&day.jazzNote){jH='<div style="font-size:12px;color:#fb7185;margin-bottom:8px;">'+day.jazzNote+'</div>';}
+    const card=document.createElement('div');card.className='dcard';
+    card.innerHTML='<div class="dheader" onclick="this.parentElement.classList.toggle(\'open\')"><div class="ddot" style="background-color:'+col+'"></div><div class="dname" style="color:'+col+'">'+day.day+'</div><div class="dbadge" style="background-color:'+bg+';color:'+col+'">'+day.type.toUpperCase()+'</div><div class="dchev">▾</div></div><div class="dbody">'+day.times.map(t=>'<div class="tbadge">'+t+'</div>').join('')+(day.jazz?'<div class="jazztag">Jazz Workout</div>':'')+'<div class="elist">'+exH+'</div>'+jH+'<div class="dnote">'+day.note+'</div></div>';
+    c.appendChild(card);
+  });
+}
+function weekKey(){const d=new Date(),day=d.getDay(),m=new Date(d);m.setDate(d.getDate()-(day===0?6:day-1));return m.toISOString().slice(0,10);}
+function renderLog(){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],grid=document.getElementById('dgrid'),wk=weekKey();
+  grid.innerHTML='';
+  days.forEach((d,i)=>{
+    const logged=!!slog[wk+'_'+i],sel=selDay===i;
+    const btn=document.createElement('button');
+    btn.className='dbtn'+(logged?' logged':'')+(sel?' selected':'');
+    btn.innerHTML='<span class="da">'+d+'</span>'+(logged?'✓':'');
+    btn.onclick=()=>selectDay(i);grid.appendChild(btn);
+  });
+  updateStats();
+}
+function selectDay(i){
+  selDay=i;ckd={};renderLog();
+  const s=SCHED[i];
+  document.getElementById('cksection').style.display='block';
+  document.getElementById('cktitle').textContent=s.day+' — '+s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  const list=document.getElementById('cklist');list.innerHTML='';
+  const items=[...s.ex.map(e=>({l:e.n,sub:e.s})),{l:'Stayed hydrated',sub:''},{l:'Took creatine (5g)',sub:'Daily non-negotiable'},...(s.type!=='rest'?[{l:'Hit 8,000+ steps',sub:'Check Apple Health'}]:[]),...(s.jazz?[{l:'Did workout with Jazz',sub:s.jazzNote||'Couples session'}]:[])];
+  items.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='ckitem';
+    d.innerHTML='<div class="ckbox">✓</div><div><div class="cklabel">'+item.l+'</div>'+(item.sub?'<div class="cksub">'+item.sub+'</div>':'')+'</div>';
+    d.onclick=()=>{ckd[i]=!ckd[i];d.classList.toggle('checked',ckd[i]);};list.appendChild(d);
+  });
+}
+function saveLog(){
+  if(selDay===null)return;
+  slog[weekKey()+'_'+selDay]={ts:Date.now(),day:SCHED[selDay].day};save();
+  document.getElementById('cksection').style.display='none';
+  selDay=null;ckd={};renderLog();toast('Session logged!');
+}
+function updateStats(){
+  const wk=weekKey();let wc=0;
+  for(let i=0;i<7;i++)if(slog[wk+'_'+i])wc++;
+  document.getElementById('weekly').textContent=wc;
+  document.getElementById('total').textContent=Object.keys(slog).length;
+  let streak=0;const now=new Date();
+  for(let i=0;i<60;i++){
+    const d=new Date(now);d.setDate(now.getDate()-i);
+    const day=d.getDay(),m=new Date(d);m.setDate(d.getDate()-(day===0?6:day-1));
+    if(slog[m.toISOString().slice(0,10)+'_'+(day===0?6:day-1)])streak++;else if(i>0)break;
+  }
+  document.getElementById('streak').textContent=streak;
+}
+renderDash();renderSched();
+</script>
+</body>
+</html>
