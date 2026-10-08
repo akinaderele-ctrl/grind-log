@@ -1,6 +1,6 @@
 // Grind Log offline support. Pages load from the network first so updates arrive,
 // and fall back to the last cached copy when the gym has no signal.
-const CACHE = 'grind-log-v4';
+const CACHE = 'grind-log-v5';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
