@@ -182,7 +182,7 @@ button, input { font-family: 'DM Sans', -apple-system, sans-serif; -webkit-appea
 .tbar { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
 .tbtn { background-color: #111111; border: 1px solid #38bdf8; color: #38bdf8; border-radius: 99px; padding: 7px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
 .lift { display: flex; align-items: center; gap: 6px; padding: 0 12px 12px 48px; flex-wrap: wrap; }
-.lin { width: 64px; background-color: #1e1e1e; border: 1px solid #3a3a3a; border-radius: 8px; color: #ffffff; font-size: 16px; padding: 7px 6px; outline: none; text-align: center; -moz-appearance: textfield; }
+.lin { width: 72px; background-color: #1e1e1e; border: 1px solid #3a3a3a; border-radius: 8px; color: #ffffff; font-size: 16px; padding: 7px 6px; outline: none; text-align: center; -moz-appearance: textfield; }
 .lin::-webkit-outer-spin-button, .lin::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .lin:focus { border-color: #f97316; }
 .lx { color: #8a8a8a; font-size: 13px; }
@@ -393,9 +393,8 @@ const SEASONS = {
           ['Biceps Curl Machine','DB Curl','DB or Band Curl','No swinging.'],
           ['Seated Calf Raise','Standing DB Calf Raise','Single-Leg Calf Raise on a step','Full stretch at the bottom.','15'] ]} ],
         fin:['Bike intervals 5 min (30s hard, 30s easy)','Rower 5 min','Fast step-ups 5 min'] },
-      C:{ name:'Full Body + Core', loops:[
-        { st:'Smith machine + nearby machines', ex:[
-          ['Smith Machine Squat','DB Goblet Squat','Tempo Bodyweight Squat (3s down)','Feet slightly forward of the bar.'],
+      C:{ name:'Squat + Core', lead:['Barbell Back Squat','Smith Machine Squat','DB Goblet Squat','Squat inside the rack with the safety pins set just below your bottom position. Brace, sit between your heels, stop 1 rep short of failure.',null,['Hack Squat Machine','Leg Press']], loops:[
+        { st:'Machines near the rack', ex:[
           ['Incline Chest Press Machine','Incline DB Press','DB Floor Press','Control the lowering.'],
           ['Assisted Pull-up Machine','Lat Pulldown','Band Lat Pulldown','Use enough assist to get clean reps.'] ]},
         { st:'Cable station + mat', ex:[
@@ -419,7 +418,7 @@ const SEASONS = {
     why:'Outdoor walks get hard December through February, so every session ends with an 8-minute incline walk that replaces the morning walk. Loop 1 lives at one bench with one pair of dumbbells; Loop 2 at one cable station. Claim both and you never leave your corner.',
     warm:'2 min easy bike, then one light round of Loop 1.',
     w: {
-      A:{ name:'Bench + Squat', lead:['Barbell Bench Press','DB Bench Press','DB Floor Press','Set the safety arms or ask for a spot. Stop 1 rep short of failure.',null,['Chest Press Machine','Smith Machine Bench Press','Push-ups']], loops:[
+      A:{ name:'Bench + Legs', lead:['Barbell Bench Press','DB Bench Press','DB Floor Press','Set the safety arms or ask for a spot. Stop 1 rep short of failure.',null,['Chest Press Machine','Smith Machine Bench Press','Push-ups']], loops:[
         { st:'One dumbbell pair, near the bench', ex:[
           ['DB Goblet Squat','Leg Press','DB Goblet Squat','Elbows inside the knees at the bottom.'],
           ['DB Reverse Lunge','Smith Machine Split Squat','Reverse Lunge','Front shin stays vertical.','8 each leg'] ]},
@@ -438,9 +437,8 @@ const SEASONS = {
           ['Face Pull (rope)','Rear Delt Fly Machine','Band Pull-Apart','Pull to your forehead, thumbs back.','15'],
           ['Cable Pull-Through','DB Hip Thrust (bench)','Glute Bridge','Snap the hips, squeeze at the top.'] ]} ],
         fin:['Bike intervals 8 min (30s hard, 30s easy)','Rower 8 min','Marching high knees + step-ups 8 min'] },
-      C:{ name:'Full Body + Carry', loops:[
+      C:{ name:'Squat + Carry', lead:['Barbell Back Squat','Smith Machine Squat','DB Goblet Squat','Squat inside the rack with the safety pins set just below your bottom position. Brace, sit between your heels, stop 1 rep short of failure.',null,['Hack Squat Machine','Leg Press']], loops:[
         { st:'One bench + one dumbbell pair', ex:[
-          ['DB Step-Up (low bench)','Leg Press','Step-Ups on stairs','Drive through the whole front foot.','8 each leg'],
           ['Incline DB Press','Incline Chest Press Machine','Incline Push-ups','Elbows at 45°, not flared.'],
           ['Single-Arm DB Row','Seated Row Machine','DB or Band Row','Brace a hand on the bench.','10 each side'] ]},
         { st:'One cable station + your dumbbells', ex:[
@@ -464,9 +462,9 @@ const SEASONS = {
     why:'Fewer reps and more load on the big lifts as golf and soccer return. The Smith machine stands in for a barbell so you can train heavy alone without a spotter. Day C adds rotation and lateral work for the golf swing and the field.',
     warm:'3 min bike, then one light round of Loop 1 at half weight.',
     w: {
-      A:{ name:'Bench + Squat', lead:['Barbell Bench Press','DB Bench Press','DB Floor Press','Set the safety arms or ask for a spot. Stop 1 rep short of failure.',null,['Chest Press Machine','Smith Machine Bench Press','Push-ups']], loops:[
-        { st:'Smith machine', ex:[
-          ['Smith Machine Squat','Leg Press','Goblet Squat with 2s pause','Brace before every rep.'],
+      A:{ name:'Bench + Legs', lead:['Barbell Bench Press','DB Bench Press','DB Floor Press','Set the safety arms or ask for a spot. Stop 1 rep short of failure.',null,['Chest Press Machine','Smith Machine Bench Press','Push-ups']], loops:[
+        { st:'Leg press + Smith machine', ex:[
+          ['Leg Press','DB Goblet Squat','Goblet Squat with 2s pause','Feet mid-platform, control the bottom.'],
           ['Smith Machine Split Squat','DB Split Squat','Rear-Foot-Elevated Split Squat (couch)','Back knee straight down.','8 each leg'] ]},
         { st:'Dumbbell rack', ex:[
           ['DB Seated Shoulder Press','Shoulder Press Machine','DB or Band Overhead Press','Press slightly in front of your face.'],
@@ -483,13 +481,12 @@ const SEASONS = {
           ['Face Pull (rope)','Rear Delt Fly Machine','Band Pull-Apart','Light and strict.','15'],
           ['Cable Curl','DB Curl','DB or Band Curl','Elbows still.'] ]} ],
         fin:['Bike intervals 5 min (30s hard, 30s easy)','Rower 5 min','Fast step-ups 5 min'] },
-      C:{ name:'Rotation + Athletic', loops:[
+      C:{ name:'Squat + Rotation', lead:['Barbell Back Squat','Smith Machine Squat','DB Goblet Squat','Squat inside the rack with the safety pins set just below your bottom position. Brace, sit between your heels, stop 1 rep short of failure.',null,['Hack Squat Machine','Leg Press']], loops:[
         { st:'One cable station', ex:[
           ['Half-Kneeling Cable Woodchop (high to low)','DB Woodchop','Band Woodchop','Hips and chest turn together.','10 each side'],
           ['Split-Stance Single-Arm Cable Row','Single-Arm DB Row','Band Row','Stay square, no twisting.','10 each side'],
           ['Staggered-Stance Single-Arm Cable Press','Single-Arm DB Bench Press','Band Chest Press','Brace against the rotation.','10 each side'] ]},
         { st:'Open turf or mat area', ex:[
-          ['DB Goblet Squat','Leg Press','Goblet or Bodyweight Squat','Smooth and controlled.'],
           ['Lateral Band Walk','Hip Abductor Machine','Lateral Band Walk','Stay low, toes forward.','15 steps each way'],
           ["Farmer's Carry",'Suitcase Carry with a plate','Suitcase Carry (DB or loaded bag)','Walk tall.','40s'] ]} ],
         fin:['Treadmill 5 min: 1 min brisk, 1 min easy','Bike 5 min','Brisk stair climbs 5 min'] }
@@ -528,9 +525,8 @@ const SEASONS = {
           ['DB Hammer Curl','Cable Curl','DB Hammer Curl','Slow on the way down.'],
           ['Side Plank','Side Plank','Side Plank','Hips high.','25s each side'] ]} ],
         fin:['Bike intervals 5 min (30s hard, 30s easy)','Rower 5 min','Brisk walk outside 5+ min'] },
-      C:{ name:'Full Body Express', loops:[
+      C:{ name:'Squat + Full Body', lead:['Barbell Back Squat','Smith Machine Squat','DB Goblet Squat','Squat inside the rack with the safety pins set just below your bottom position. Brace, sit between your heels, stop 1 rep short of failure.',null,['Hack Squat Machine','Leg Press']], loops:[
         { st:'Kettlebell + dumbbell corner', ex:[
-          ['DB Step-Up','Leg Press','Step-Ups on stairs','Control the step down.','8 each leg'],
           ['DB Push Press','Shoulder Press Machine','DB Push Press','Small dip, drive with the legs.'],
           ['DB Bent-Over Row','Seated Row Machine','DB Bent-Over Row','Flat back, row to the hips.'] ]},
         { st:'Same corner + mat', ex:[
@@ -638,10 +634,10 @@ DFORMATS.anytime = { name:'Anytime 15', short:'Anytime 15', tags:['legs','push',
   long:{ seg:1, ex:0, rx:'20 min', cardio:20 } };
 // Extra choices in the per-exercise swap list, on top of each exercise's gym / swap / home versions
 const ALT_EXTRA = {
-  'Chest Press Machine':['Barbell Bench Press','DB Bench Press'], 'DB Bench Press':['Barbell Bench Press','Chest Press Machine'],
-  'Incline Chest Press Machine':['Incline Barbell Bench Press','Incline DB Press'], 'Incline DB Press':['Incline Barbell Bench Press','Incline Chest Press Machine'],
+  'Chest Press Machine':['DB Bench Press'], 'DB Bench Press':['Chest Press Machine'],
+  'Incline Chest Press Machine':['Incline DB Press'], 'Incline DB Press':['Incline Chest Press Machine'],
   'Lat Pulldown':['Assisted Pull-up Machine'], 'Assisted Pull-up Machine':['Lat Pulldown'],
-  'Leg Press':['Barbell Back Squat','Smith Machine Squat'], 'Smith Machine Squat':['Barbell Back Squat','Leg Press'],
+  'Leg Press':['Hack Squat Machine'],
   'Seated Row Machine':['Seated Cable Row','Chest-Supported DB Row'], 'Shoulder Press Machine':['DB Seated Shoulder Press'],
   'DB Romanian Deadlift':['Barbell Romanian Deadlift'], 'DB Romanian Deadlift (heavy)':['Barbell Romanian Deadlift']
 };
@@ -950,7 +946,7 @@ function renderSession(p, S, ph) {
   const fin = finText(W.fin[mi], p.b.s, long), fp = finPreset(fin);
   let h = '<div class="row between"><div><div class="kicker">Workout ' + pickW + ' · ~' + len + ' min</div><div class="wo-title" style="margin-top:4px">' + W.name + '</div></div>' + letterChips() + '</div>';
   h += tbar(W.lead ? [['Rest 90s', restP(90)], ['Rest 2 min', restP(120)], ['Finisher', fp]] : [['Rest 60s', restP(60)], ['Rest 90s', restP(90)], ['Finisher', fp]]);
-  h += '<div class="rx"><b>' + ph.name + ' week: ' + ph.rounds + ' rounds × ' + ph.reps + ' reps.</b> ' + ph.note + '<br><span style="color:#8a8a8a">Warm-up: ' + S.warm + '</span></div>';
+  h += '<div class="rx"><b>' + ph.name + ' week: ' + ph.rounds + ' rounds × ' + ph.reps + ' reps.</b> ' + ph.note + '<br><span style="color:#8a8a8a">Warm-up: ' + S.warm + '</span><br><span style="color:#38bdf8">Log your best set: the heaviest weight you got every rep with.</span></div>';
   let idx = 0;
   curEx = [];
   if (W.lead) {
@@ -1032,14 +1028,14 @@ function exRow(e, i, mi, rx) {
   let lift = '';
   if (kind) {
     const last = lastLift(name), tgt = targetReps(rx);
-    let hint = '<span class="lnote">First time: log what you use</span>';
+    let hint = '<span class="lnote">First time: log your best set</span>';
     if (last && (last.w || last.r)) {
       let sw = 0, sr = tgt, txt;
       if (kind === 'load' && last.w) { sw = last.r >= tgt ? last.w + incFor(name) : last.w; txt = 'Last ' + last.w + ' × ' + (last.r || '?') + ' · tap for ' + sw + ' × ' + tgt; }
       else { sr = last.r >= tgt ? last.r + 2 : tgt; txt = 'Last ' + last.r + ' reps · tap for ' + sr; }
       hint = '<button class="lhint" onclick="useHint(' + i + ',' + sw + ',' + sr + ')">' + txt + '</button>';
     }
-    lift = '<div class="lift">' + (kind === 'load' ? '<input class="lin" id="lw' + i + '" type="number" inputmode="decimal" placeholder="lb" value="' + (v.w || '') + '" oninput="setLift(' + i + ',\'w\',this.value)"><span class="lx">×</span>' : '') +
+    lift = '<div class="lift">' + (kind === 'load' ? '<input class="lin" id="lw' + i + '" type="number" inputmode="decimal" placeholder="best lb" value="' + (v.w || '') + '" oninput="setLift(' + i + ',\'w\',this.value)"><span class="lx">×</span>' : '') +
       '<input class="lin" id="lr' + i + '" type="number" inputmode="numeric" placeholder="reps" value="' + (v.r || '') + '" oninput="setLift(' + i + ',\'r\',this.value)">' + hint + '</div>';
   }
   return '<div class="ex' + (checks[i] ? ' checked' : '') + '" id="ex' + i + '"><div class="ex-main"><div class="ckbox" onclick="toggleEx(' + i + ')">✓</div>' +
@@ -1245,7 +1241,7 @@ function renderPlan() {
   const p = position(t), curPh = phaseKey(p.b.weeks, p.wk);
   document.getElementById('phaseTable').innerHTML = '<table class="ptable"><tr><th>Phase</th><th>Sets × reps</th><th>Intent</th></tr>' +
     ['base','build','push','deload'].map(k => { const P = PHASES[k]; return '<tr class="' + (k === curPh && planSeason === cur ? 'cur' : '') + '"><td><b>' + P.name + '</b></td><td style="white-space:nowrap">' + P.rounds + ' × ' + P.reps + '</td><td>' + P.note + '</td></tr>'; }).join('') +
-    '</table><div class="small muted" style="margin-top:10px;line-height:1.5">13-week seasons run Base (wks 1 to 4), Build (5 to 8), Push (9 to 12), Deload (13). The shorter Fall blocks skip Push. Timed or counted moves keep their own prescription.</div>';
+    '</table><div class="small muted" style="margin-top:10px;line-height:1.5">13-week seasons run Base (wks 1 to 4), Build (5 to 8), Push (9 to 12), Deload (13). The shorter Fall blocks skip Push. Timed or counted moves keep their own prescription. Bench (A) and squat (C) are the two heavy lead lifts, once a week each. For weights, log your best set: the heaviest weight you completed every rep with. When you hit the target reps at that weight, the app suggests adding 5 lb (10 lb on squat and leg press).</div>';
   document.getElementById('yearTable').innerHTML = '<table class="ptable"><tr><th>Block</th><th>Dates</th><th>Pace target</th></tr>' +
     BLOCKS.map((b, i) => { const end = blockEndI(i), pt = paceAt(end); return '<tr class="' + (i === p.bi && !p.pre && !p.pause ? 'cur' : '') + '"><td><b>' + b.name + '</b><br><span class="muted">' + SEASONS[b.s].theme + '</span></td><td>' + fmt(blockStart(i)) + ' to ' + fmt(end) + '</td><td>' + (pt ? pt.toFixed(1) + ' lbs' : 'Set start weight') + '</td></tr>'; }).join('') + '</table>' +
     (pauses.length ? '<div class="small muted" style="margin-top:10px;line-height:1.5">Planned breaks: ' + pauses.map(x => { const m = mondayOf(parse(x.start)); return x.label + ' ' + fmt(m) + ' to ' + fmt(addDays(m, 7 * x.weeks - 1)); }).join('; ') + '. The dates above already make room for them.</div>' : '');
